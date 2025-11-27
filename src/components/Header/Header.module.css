@@ -1,0 +1,112 @@
+.header {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+}
+
+.logoLink:hover {
+    transform: scale(1.05);
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+.logoText {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.navLink {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s ease-in-out;
+    position: relative;
+}
+
+.navLink:hover {
+    color: var(--color-primary);
+}
+
+.navLink::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transition: width 0.3s ease-in-out;
+}
+
+.navLink:hover::after {
+    width: 100%;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.userName {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .nav {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .logoText {
+        font-size: 1.25rem;
+    }
+
+    .userName {
+        display: none;
+    }
+}

@@ -1,0 +1,26 @@
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+
+const ProtectedRoute = ({ allowedRoles }) => {
+    const { isAuthenticated, user, loading } = useAuth();
+
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (allowedRoles && !allowedRoles.includes(user.role)) {
+        // Redirect to appropriate dashboard based on role
+        if (user.role === 'aluno') {
+            return <Navigate to="/aluno/projetos" replace />;
+        }
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return <Outlet />;
+};
+
+export default ProtectedRoute;
