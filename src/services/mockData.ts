@@ -1,5 +1,7 @@
+import type { Project, User, Course, Statistics, PendingApproval } from '../types';
+
 // Mock data for projects
-export const mockProjects = [
+export const mockProjects: Project[] = [
     {
         id: 1,
         title: 'Capacite os Jovens por Mentoria',
@@ -63,7 +65,7 @@ export const mockProjects = [
 ];
 
 // Mock data for users
-export const mockUsers = [
+export const mockUsers: User[] = [
     {
         id: 1,
         name: 'João Silva',
@@ -112,7 +114,7 @@ export const mockUsers = [
 ];
 
 // Mock data for courses
-export const mockCourses = [
+export const mockCourses: Course[] = [
     {
         id: 1,
         name: 'Ciência da Computação',
@@ -144,7 +146,7 @@ export const mockCourses = [
 ];
 
 // Mock data for dashboard statistics
-export const mockStatistics = {
+export const mockStatistics: Statistics = {
     totalProjects: 45,
     activeProjects: 32,
     totalUsers: 1250,
@@ -154,7 +156,7 @@ export const mockStatistics = {
 };
 
 // Mock data for pending approvals
-export const mockPendingApprovals = [
+export const mockPendingApprovals: PendingApproval[] = [
     {
         id: 1,
         projectTitle: 'Novo Projeto de Extensão Digital',
@@ -182,22 +184,18 @@ export const mockPendingApprovals = [
 ];
 
 // Helper functions
-export const getProjectById = (id) => {
-    return mockProjects.find(project => project.id === parseInt(id));
+export const getProjectById = (id: number | string): Project | undefined => {
+    return mockProjects.find(project => project.id === parseInt(String(id)));
 };
 
-export const getUserById = (id) => {
-    return mockUsers.find(user => user.id === parseInt(id));
+export const getUserById = (id: number | string): User | undefined => {
+    return mockUsers.find(user => user.id === parseInt(String(id)));
 };
 
-export const getCourseById = (id) => {
-    return mockCourses.find(course => course.id === parseInt(id));
+export const getCourseById = (id: number | string): Course | undefined => {
+    return mockCourses.find(course => course.id === parseInt(String(id)));
 };
 
-export const getProjectsByStatus = (status) => {
+export const getProjectsByStatus = (status: Project['status']): Project[] => {
     return mockProjects.filter(project => project.status === status);
-};
-
-export const getUsersByRole = (role) => {
-    return mockUsers.filter(user => user.role === role);
 };

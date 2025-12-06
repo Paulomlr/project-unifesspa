@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { mockUsers } from '../../services/mockData';
+import { authService } from '../../services/authService';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './LoginPage.module.css';
@@ -10,21 +11,30 @@ const LoginPage = () => {
     const { register, handleSubmit, formState: { errors }, setError } = useForm();
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit = (data) => {
-        // Mock login - find user by email
-        const user = mockUsers.find(u => u.email === data.email);
-
-        if (user && data.password === 'senha123') { // Mock password
-            login(user);
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        try {
+            // Call the real API
+            const response = await authService.login(data.email, data.password);
+            
+            // Login with user data and token
+            login(response.user, response.token);
+            
             // Redirect based on role
-            if (user.role === 'aluno') {
+            if (response.user.role === 'aluno') {
                 navigate('/aluno/projetos');
             } else {
                 navigate('/dashboard');
             }
-        } else {
-            setError('email', { type: 'manual', message: 'Email ou senha incorretos' });
+        } catch (error) {
+            setError('email', { 
+                type: 'manual', 
+                message: error.message || 'Email ou senha incorretos' 
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -81,18 +91,13 @@ const LoginPage = () => {
                             <a href="#" className={styles.forgotLink}>Esqueceu a senha?</a>
                         </div>
 
-                        <Button type="submit" variant="primary" fullWidth>
-                            Entrar
+                        <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
+                            {isLoading ? 'Entrando...' : 'Entrar'}
                         </Button>
                     </form>
 
                     <div className={styles.formFooter}>
                         <p>Não tem uma conta? <a href="/cadastro" className={styles.signupLink}>Cadastre-se</a></p>
-                    </div>
-
-                    <div className={styles.demoInfo}>
-                        <p><strong>Demo:</strong> Use qualquer email do sistema com senha: <code>senha123</code></p>
-                        <p>Exemplo: joao.silva@unifesspa.edu.br (Professor) ou pedro.almeida@aluno.unifesspa.edu.br (Aluno)</p>
                     </div>
                 </div>
             </div>
