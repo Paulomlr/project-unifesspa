@@ -84,5 +84,6 @@ export interface RegisterData {
 
 // API related types
 export interface ErrorResponse {
+    error: string | undefined;
     message?: string;
 }

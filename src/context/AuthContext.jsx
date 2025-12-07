@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check for saved user and token in localStorage
         const savedUser = localStorage.getItem('user');
         const savedToken = localStorage.getItem('token');
         
@@ -21,14 +20,12 @@ export const AuthProvider = ({ children }) => {
                 setToken(savedToken);
                 setIsAuthenticated(true);
                 
-                // Verify token is still valid
                 authService.verifyToken(savedToken)
                     .then((data) => {
                         setUser(data.user);
                         localStorage.setItem('user', JSON.stringify(data.user));
                     })
                     .catch(() => {
-                        // Token is invalid, clear everything
                         logout();
                     });
             } catch (error) {

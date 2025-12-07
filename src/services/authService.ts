@@ -28,8 +28,15 @@ export const authService = {
 
             // json tem a forma:
             // { success: true, message: string, data: { token, user } }
+            const userData = json.data.user;
+            
+            // Normaliza o role para minúsculo para compatibilidade
+            if (userData.role) {
+                userData.role = userData.role.toLowerCase();
+            }
+            
             return {
-                user: json.data.user,
+                user: userData,
                 token: json.data.token,
             };
         } catch (error) {
