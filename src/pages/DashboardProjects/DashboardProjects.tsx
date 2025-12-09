@@ -12,7 +12,7 @@ const DashboardProjects = () => {
     const [projects, setProjects] = useState(mockProjects);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         if (window.confirm('Tem certeza que deseja excluir este projeto?')) {
             setProjects(projects.filter(p => p.id !== id));
         }

@@ -9,14 +9,14 @@ import styles from './DashboardApprovals.module.css';
 const DashboardApprovals = () => {
     const [approvals, setApprovals] = useState(mockPendingApprovals);
 
-    const handleApprove = (id) => {
+    const handleApprove = (id: number) => {
         if (window.confirm('Aprovar este projeto?')) {
             setApprovals(approvals.filter(a => a.id !== id));
             alert('Projeto aprovado com sucesso!');
         }
     };
 
-    const handleReject = (id) => {
+    const handleReject = (id: number) => {
         if (window.confirm('Rejeitar este projeto?')) {
             setApprovals(approvals.filter(a => a.id !== id));
         }

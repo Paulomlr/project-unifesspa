@@ -11,7 +11,7 @@ const DashboardUsers = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState('all');
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
             setUsers(users.filter(u => u.id !== id));
         }

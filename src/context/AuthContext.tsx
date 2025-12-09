@@ -1,11 +1,25 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
+import { User } from '../types';
 
-export const AuthContext = createContext();
+export interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    loading: boolean;
+    login: (userData: User) => void;
+    logout: () => void;
+    updateUser: (userData: User) => void;
+}
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         // Check for saved user in localStorage
@@ -23,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = (userData) => {
+    const login = (userData: User) => {
         setUser(userData);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(userData));
@@ -35,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
-    const updateUser = (userData) => {
+    const updateUser = (userData: User) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
     };

@@ -10,7 +10,7 @@ const DashboardCourses = () => {
     const [courses, setCourses] = useState(mockCourses);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         if (window.confirm('Tem certeza que deseja excluir este curso?')) {
             setCourses(courses.filter(c => c.id !== id));
         }

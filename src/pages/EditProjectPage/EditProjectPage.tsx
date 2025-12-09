@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProjectById } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -8,21 +8,37 @@ import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './EditProjectPage.module.css';
 
+interface EditProjectForm {
+    title: string;
+    category: string;
+    status: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+}
+
 const EditProjectPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<EditProjectForm>();
 
     useEffect(() => {
         if (id) {
             const project = getProjectById(id);
             if (project) {
-                reset(project);
+                reset({
+                    title: project.title,
+                    category: project.category,
+                    status: project.status,
+                    startDate: project.startDate,
+                    endDate: project.endDate,
+                    description: project.description,
+                });
             }
         }
     }, [id, reset]);
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<EditProjectForm> = (data) => {
         console.log('Updated project data:', data);
         alert('Projeto atualizado com sucesso!');
         navigate('/dashboard/projetos');

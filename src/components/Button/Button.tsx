@@ -1,4 +1,12 @@
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 import styles from './Button.module.css';
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: ReactNode;
+    variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+    size?: 'small' | 'medium' | 'large';
+    fullWidth?: boolean;
+}
 
 const Button = ({
     children,
@@ -8,8 +16,9 @@ const Button = ({
     type = 'button',
     disabled = false,
     fullWidth = false,
-    className = ''
-}) => {
+    className = '',
+    ...rest
+}: ButtonProps) => {
     const buttonClass = `
     ${styles.button} 
     ${styles[variant]} 
@@ -24,6 +33,7 @@ const Button = ({
             className={buttonClass}
             onClick={onClick}
             disabled={disabled}
+            {...rest}
         >
             {children}
         </button>

@@ -1,4 +1,13 @@
+import { ReactNode, MouseEventHandler } from 'react';
 import styles from './Card.module.css';
+
+interface CardProps {
+    children: ReactNode;
+    title?: string;
+    className?: string;
+    onClick?: MouseEventHandler<HTMLDivElement>;
+    hoverable?: boolean;
+}
 
 const Card = ({
     children,
@@ -6,7 +15,7 @@ const Card = ({
     className = '',
     onClick,
     hoverable = false
-}) => {
+}: CardProps) => {
     const cardClass = `
     ${styles.card} 
     ${hoverable ? styles.hoverable : ''}

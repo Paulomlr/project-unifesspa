@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { mockUsers } from '../../services/mockData';
@@ -6,12 +6,17 @@ import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './LoginPage.module.css';
 
+interface LoginForm {
+    email: string;
+    password: string;
+}
+
 const LoginPage = () => {
-    const { register, handleSubmit, formState: { errors }, setError } = useForm();
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<LoginForm>();
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<LoginForm> = (data) => {
         // Mock login - find user by email
         const user = mockUsers.find(u => u.email === data.email);
 

@@ -1,19 +1,30 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './RegisterPage.module.css';
+import { User } from '../../types';
+
+interface RegisterForm {
+  name: string;
+  email: string;
+  role: 'aluno' | 'professor';
+  department?: string;
+  course?: string;
+  password: string;
+  confirmPassword: string;
+  terms: boolean;
+}
 
 const RegisterPage = () => {
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>();
   const { login } = useAuth();
   const navigate = useNavigate();
-  const password = watch('password');
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<RegisterForm> = (data) => {
     // Mock user registration
-    const newUser = {
+    const newUser: User = {
       id: Date.now(),
       name: data.name,
       email: data.email,

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Bell, FolderOpen, Home, Users, CheckSquare } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { mockStatistics, mockProjects, mockUsers } from '../../services/mockData';
+import { Project } from '../../types';
+import { mockStatistics, mockProjects } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
 import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const [stats, setStats] = useState(mockStatistics);
-    const [recentProjects, setRecentProjects] = useState([]);
+    const [stats] = useState(mockStatistics);
+    const [recentProjects, setRecentProjects] = useState<Project[]>([]);
 
     useEffect(() => {
         // Get recent projects

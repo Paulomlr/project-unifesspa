@@ -16,7 +16,12 @@ import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // Placeholder components for pages not yet implemented
-const PlaceholderPage = ({ title }) => (
+// Placeholder components for pages not yet implemented
+interface PlaceholderPageProps {
+    title: string;
+}
+
+const PlaceholderPage = ({ title }: PlaceholderPageProps) => (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
         <h1>{title}</h1>
         <p>Em desenvolvimento...</p>

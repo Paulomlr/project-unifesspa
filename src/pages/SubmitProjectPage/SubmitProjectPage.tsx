@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
@@ -6,11 +6,20 @@ import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './SubmitProjectPage.module.css';
 
+interface SubmitProjectForm {
+    title: string;
+    category: string;
+    coordinator: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+}
+
 const SubmitProjectPage = () => {
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm<SubmitProjectForm>();
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<SubmitProjectForm> = (data) => {
         console.log('New project data:', data);
         alert('Projeto submetido com sucesso! Aguarde a aprovação.');
         navigate('/dashboard/projetos');
@@ -61,6 +70,7 @@ const SubmitProjectPage = () => {
                                 name="coordinator"
                                 placeholder="Nome do coordenador"
                                 register={register}
+                                error={errors.coordinator}
                                 required
                             />
                         </div>
@@ -71,6 +81,7 @@ const SubmitProjectPage = () => {
                                 name="startDate"
                                 type="date"
                                 register={register}
+                                error={errors.startDate}
                                 required
                             />
                             <Input
@@ -78,6 +89,7 @@ const SubmitProjectPage = () => {
                                 name="endDate"
                                 type="date"
                                 register={register}
+                                error={errors.endDate}
                                 required
                             />
                         </div>

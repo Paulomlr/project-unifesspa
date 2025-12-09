@@ -1,9 +1,18 @@
 import styles from './ProjectCard.module.css';
 import Button from '../Button/Button';
+import { Project } from '../../types';
 
-const ProjectCard = ({ project, showActions = false, onEdit, onDelete, onView }) => {
-    const getStatusBadge = (status) => {
-        const statusMap = {
+interface ProjectCardProps {
+    project: Project;
+    showActions?: boolean;
+    onEdit?: (project: Project) => void;
+    onDelete?: (project: Project) => void;
+    onView?: (project: Project) => void;
+}
+
+const ProjectCard = ({ project, showActions = false, onEdit, onDelete, onView }: ProjectCardProps) => {
+    const getStatusBadge = (status: string) => {
+        const statusMap: Record<string, { text: string; class: string }> = {
             ativo: { text: 'Ativo', class: styles.statusActive },
             em_andamento: { text: 'Em Andamento', class: styles.statusProgress },
             planejamento: { text: 'Planejamento', class: styles.statusPlanning },

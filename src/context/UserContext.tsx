@@ -1,16 +1,39 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
+import { Project, Course } from '../types';
 
-export const UserContext = createContext();
+interface UserPreferences {
+    theme: string;
+    notifications: boolean;
+    language: string;
+}
 
-export const UserProvider = ({ children }) => {
-    const [userPreferences, setUserPreferences] = useState({
+export interface UserContextType {
+    userPreferences: UserPreferences;
+    updatePreferences: (newPreferences: Partial<UserPreferences>) => void;
+    userProjects: Project[];
+    setUserProjects: (projects: Project[]) => void;
+    addProject: (project: Project) => void;
+    removeProject: (projectId: number) => void;
+    updateProject: (projectId: number, updatedData: Partial<Project>) => void;
+    userCourses: Course[];
+    setUserCourses: (courses: Course[]) => void;
+}
+
+export const UserContext = createContext<UserContextType | undefined>(undefined);
+
+interface UserProviderProps {
+    children: ReactNode;
+}
+
+export const UserProvider = ({ children }: UserProviderProps) => {
+    const [userPreferences, setUserPreferences] = useState<UserPreferences>({
         theme: 'light',
         notifications: true,
         language: 'pt-BR',
     });
 
-    const [userProjects, setUserProjects] = useState([]);
-    const [userCourses, setUserCourses] = useState([]);
+    const [userProjects, setUserProjects] = useState<Project[]>([]);
+    const [userCourses, setUserCourses] = useState<Course[]>([]);
 
     useEffect(() => {
         // Load user preferences from localStorage
@@ -24,21 +47,21 @@ export const UserProvider = ({ children }) => {
         }
     }, []);
 
-    const updatePreferences = (newPreferences) => {
+    const updatePreferences = (newPreferences: Partial<UserPreferences>) => {
         const updated = { ...userPreferences, ...newPreferences };
         setUserPreferences(updated);
         localStorage.setItem('userPreferences', JSON.stringify(updated));
     };
 
-    const addProject = (project) => {
+    const addProject = (project: Project) => {
         setUserProjects([...userProjects, project]);
     };
 
-    const removeProject = (projectId) => {
+    const removeProject = (projectId: number) => {
         setUserProjects(userProjects.filter(p => p.id !== projectId));
     };
 
-    const updateProject = (projectId, updatedData) => {
+    const updateProject = (projectId: number, updatedData: Partial<Project>) => {
         setUserProjects(
             userProjects.map(p => p.id === projectId ? { ...p, ...updatedData } : p)
         );

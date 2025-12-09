@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -6,11 +6,18 @@ import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
 import styles from './ContactPage.module.css';
 
+interface ContactForm {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+}
+
 const ContactPage = () => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
     const [submitted, setSubmitted] = useState(false);
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<ContactForm> = (data) => {
         console.log('Contact form data:', data);
         setSubmitted(true);
         reset();
