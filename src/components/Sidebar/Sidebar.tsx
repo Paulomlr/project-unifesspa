@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, FolderOpen, CheckSquare, BookOpen, Users, User, Settings } from 'lucide-react';
+import { Home, FolderOpen, CheckSquare, BookOpen, Users, User, Settings, GraduationCap } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Sidebar.module.css';
 
@@ -12,6 +12,7 @@ const Sidebar = () => {
         { path: '/dashboard/projetos', label: 'Projetos', icon: FolderOpen },
         { path: '/dashboard/aprovacoes', label: 'Aprovações', icon: CheckSquare, roles: ['professor', 'admin'] },
         { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['professor', 'admin'] },
+        { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['professor', 'admin'] },
         { path: '/dashboard/usuarios', label: 'Usuários', icon: Users, roles: ['admin'] },
         { path: '/dashboard/perfil', label: 'Perfil', icon: User },
         { path: '/dashboard/config', label: 'Configurações', icon: Settings },

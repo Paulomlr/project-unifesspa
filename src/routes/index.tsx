@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
-import RegisterPage from '../pages/RegisterPage/RegisterPage';
 import ContactPage from '../pages/ContactPage/ContactPage';
 import StudentProjectsPage from '../pages/StudentProjectsPage/StudentProjectsPage';
 import ActiveProjectsPage from '../pages/ActiveProjectsPage/ActiveProjectsPage';
@@ -10,6 +9,7 @@ import DashboardProjects from '../pages/DashboardProjects/DashboardProjects';
 import DashboardApprovals from '../pages/DashboardApprovals/DashboardApprovals';
 import DashboardCourses from '../pages/DashboardCourses/DashboardCourses';
 import DashboardUsers from '../pages/DashboardUsers/DashboardUsers';
+import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessors';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import EditProjectPage from '../pages/EditProjectPage/EditProjectPage';
 import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
@@ -37,10 +37,6 @@ const router = createBrowserRouter([
     {
         path: '/login',
         element: <LoginPage />,
-    },
-    {
-        path: '/cadastro',
-        element: <RegisterPage />,
     },
     {
         path: '/contato',
@@ -103,6 +99,10 @@ const router = createBrowserRouter([
             {
                 path: 'usuarios',
                 element: <DashboardUsers />,
+            },
+            {
+                path: 'professores',
+                element: <DashboardProfessors />,
             },
             {
                 path: 'perfil',
