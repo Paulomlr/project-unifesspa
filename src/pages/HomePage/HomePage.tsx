@@ -90,7 +90,7 @@ const HomePage = () => {
             <section className={styles.cta}>
                 <h2 className={styles.ctaTitle}>Pronto para fazer a diferença?</h2>
                 <p className={styles.ctaDescription}>
-                    Junte-se à comunidade UNIFESSPA+ e participe de projetos que transformam vidas
+                    Junte-se à comunidade e participe de projetos que transformam vidas
                 </p>
                 <div className={styles.ctaActions}>
                     <Button variant="primary" size="large" onClick={() => navigate('/cadastro')}>

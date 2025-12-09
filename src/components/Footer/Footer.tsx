@@ -9,10 +9,10 @@ const Footer = () => {
                     <div className={styles.brand}>
                         <img
                             src="/src/assets/logos/logo.png"
-                            alt="UNIFESSPA+"
+                            alt="Conecta Unifesspa"
                             className={styles.logo}
                         />
-                        <h3 className={styles.brandName}>UNIFESSPA+</h3>
+                        <h3 className={styles.brandName}>Conecta Unifesspa</h3>
                     </div>
                     <p className={styles.description}>
                         Plataforma de gestão e integração de projetos universitários da UNIFESSPA.
@@ -40,7 +40,7 @@ const Footer = () => {
             </div>
 
             <div className={styles.bottom}>
-                <p>&copy; {new Date().getFullYear()} UNIFESSPA+. Todos os direitos reservados.</p>
+                <p>&copy; {new Date().getFullYear()} Conecta Unifesspa. Todos os direitos reservados.</p>
             </div>
         </footer>
     );

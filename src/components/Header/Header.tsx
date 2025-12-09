@@ -18,14 +18,14 @@ const Header = () => {
                 <Link to="/" className={styles.logoLink}>
                     <img
                         src="/src/assets/logos/logo.png"
-                        alt="UNIFESSPA+"
+                        alt="Conecta Unifesspa"
                         className={styles.logo}
                     />
-                    <span className={styles.logoText}>UNIFESSPA+</span>
+                    <span className={styles.logoText}>Conecta Unifesspa</span>
                 </Link>
 
                 <nav className={styles.nav}>
-                    <Link to="/" className={styles.navLink}>Início</Link>
+                    <Link to="/" className={styles.navLink}>Home</Link>
                     <Link to="/projetos" className={styles.navLink}>Projetos</Link>
                     <Link to="/contato" className={styles.navLink}>Contato</Link>
                 </nav>
@@ -45,9 +45,6 @@ const Header = () => {
                         <>
                             <Button variant="outline" size="small" onClick={() => navigate('/login')}>
                                 Entrar
-                            </Button>
-                            <Button variant="primary" size="small" onClick={() => navigate('/cadastro')}>
-                                Cadastrar
                             </Button>
                         </>
                     )}
