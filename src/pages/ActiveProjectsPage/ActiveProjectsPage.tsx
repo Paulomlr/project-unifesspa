@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { FolderOpen } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { mockProjects } from '../../services/mockData';
 import Header from '../../components/Header/Header';
@@ -39,7 +40,7 @@ const ActiveProjectsPage = () => {
                     </div>
                 ) : (
                     <div className={styles.emptyState}>
-                        <img src="/src/assets/icons/projetos.svg" alt="" className={styles.emptyIcon} />
+                        <FolderOpen className={styles.emptyIcon} size={48} />
                         <h3>Você não tem projetos ativos</h3>
                         <p>Explore os projetos disponíveis e inscreva-se para participar.</p>
                         <Button

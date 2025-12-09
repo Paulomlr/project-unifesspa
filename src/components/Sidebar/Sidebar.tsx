@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { Home, FolderOpen, CheckSquare, BookOpen, Users, User, Settings } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Sidebar.module.css';
 
@@ -7,13 +8,13 @@ const Sidebar = () => {
     const { user } = useAuth();
 
     const menuItems = [
-        { path: '/dashboard', label: 'Dashboard', icon: '/src/assets/icons/home.svg' },
-        { path: '/dashboard/projetos', label: 'Projetos', icon: '/src/assets/icons/projetos.svg' },
-        { path: '/dashboard/aprovacoes', label: 'Aprovações', icon: '/src/assets/icons/aprovacoes.svg', roles: ['professor', 'admin'] },
-        { path: '/dashboard/cursos', label: 'Cursos', icon: '/src/assets/icons/cursos.svg', roles: ['professor', 'admin'] },
-        { path: '/dashboard/usuarios', label: 'Usuários', icon: '/src/assets/icons/usuarios.svg', roles: ['admin'] },
-        { path: '/dashboard/perfil', label: 'Perfil', icon: '/src/assets/icons/perfil.svg' },
-        { path: '/dashboard/config', label: 'Configurações', icon: '/src/assets/icons/config.svg' },
+        { path: '/dashboard', label: 'Dashboard', icon: Home },
+        { path: '/dashboard/projetos', label: 'Projetos', icon: FolderOpen },
+        { path: '/dashboard/aprovacoes', label: 'Aprovações', icon: CheckSquare, roles: ['professor', 'admin'] },
+        { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['professor', 'admin'] },
+        { path: '/dashboard/usuarios', label: 'Usuários', icon: Users, roles: ['admin'] },
+        { path: '/dashboard/perfil', label: 'Perfil', icon: User },
+        { path: '/dashboard/config', label: 'Configurações', icon: Settings },
     ];
 
     const filteredMenuItems = menuItems.filter(item => {
@@ -33,16 +34,19 @@ const Sidebar = () => {
             </div>
 
             <nav className={styles.nav}>
-                {filteredMenuItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
-                    >
-                        <img src={item.icon} alt={item.label} className={styles.icon} />
-                        <span>{item.label}</span>
-                    </Link>
-                ))}
+                {filteredMenuItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
+                        >
+                            <Icon className={styles.icon} size={20} />
+                            <span>{item.label}</span>
+                        </Link>
+                    );
+                })}
             </nav>
 
             <div className={styles.userInfo}>

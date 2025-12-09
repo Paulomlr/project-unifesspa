@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { mockUsers } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
@@ -94,14 +95,14 @@ const DashboardUsers = () => {
                                                     className={styles.actionButton}
                                                     title="Editar"
                                                 >
-                                                    <img src="/src/assets/icons/edit.svg" alt="Editar" />
+                                                    <Pencil size={18} />
                                                 </button>
                                                 <button
                                                     className={`${styles.actionButton} ${styles.delete}`}
                                                     onClick={() => handleDelete(user.id)}
                                                     title="Excluir"
                                                 >
-                                                    <img src="/src/assets/icons/trash.svg" alt="Excluir" />
+                                                    <Trash2 size={18} />
                                                 </button>
                                             </div>
                                         </td>

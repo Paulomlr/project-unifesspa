@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CheckSquare } from 'lucide-react';
 import { mockPendingApprovals } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
@@ -75,7 +76,7 @@ const DashboardApprovals = () => {
                         ))
                     ) : (
                         <div className={styles.emptyState}>
-                            <img src="/src/assets/icons/aprovacoes.svg" alt="" className={styles.emptyIcon} />
+                            <CheckSquare className={styles.emptyIcon} size={48} />
                             <h3>Nenhuma aprovação pendente</h3>
                             <p>Todos os projetos solicitados foram processados.</p>
                         </div>

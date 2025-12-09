@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Bell, FolderOpen, Home, Users, CheckSquare } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { mockStatistics, mockProjects, mockUsers } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -25,11 +26,7 @@ const Dashboard = () => {
                         <h1 className={styles.title}>Dashboard</h1>
                         <p className={styles.subtitle}>Bem-vindo de volta, {user?.name}!</p>
                     </div>
-                    <img
-                        src="/src/assets/icons/sino.svg"
-                        alt="Notificações"
-                        className={styles.notificationIcon}
-                    />
+                    <Bell className={styles.notificationIcon} size={24} />
                 </div>
 
                 {/* Statistics Cards */}
@@ -42,7 +39,7 @@ const Dashboard = () => {
                                 <p className={styles.statChange}>+{stats.projectsThisMonth} este mês</p>
                             </div>
                             <div className={styles.statIcon} style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
-                                <img src="/src/assets/icons/projetos.svg" alt="Projetos" />
+                                <FolderOpen size={24} />
                             </div>
                         </div>
                     </Card>
@@ -55,7 +52,7 @@ const Dashboard = () => {
                                 <p className={styles.statChange}>Em andamento</p>
                             </div>
                             <div className={styles.statIcon} style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
-                                <img src="/src/assets/icons/home.svg" alt="Ativos" />
+                                <Home size={24} />
                             </div>
                         </div>
                     </Card>
@@ -68,7 +65,7 @@ const Dashboard = () => {
                                 <p className={styles.statChange}>Participantes</p>
                             </div>
                             <div className={styles.statIcon} style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
-                                <img src="/src/assets/icons/usuarios.svg" alt="Usuários" />
+                                <Users size={24} />
                             </div>
                         </div>
                     </Card>
@@ -81,7 +78,7 @@ const Dashboard = () => {
                                 <p className={styles.statChange}>Aguardando</p>
                             </div>
                             <div className={styles.statIcon} style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
-                                <img src="/src/assets/icons/aprovacoes.svg" alt="Aprovações" />
+                                <CheckSquare size={24} />
                             </div>
                         </div>
                     </Card>

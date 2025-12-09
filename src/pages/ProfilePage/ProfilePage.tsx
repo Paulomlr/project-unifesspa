@@ -1,3 +1,4 @@
+import { Pencil } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { mockProjects } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -35,7 +36,7 @@ const ProfilePage = () => {
                                     className={styles.avatar}
                                 />
                                 <button className={styles.editAvatarButton}>
-                                    <img src="/src/assets/icons/edit.svg" alt="Alterar foto" />
+                                    <Pencil size={16} />
                                 </button>
                             </div>
                             <div className={styles.profileInfo}>
