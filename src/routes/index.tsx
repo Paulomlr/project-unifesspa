@@ -13,6 +13,7 @@ import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessor
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import EditProjectPage from '../pages/EditProjectPage/EditProjectPage';
 import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
+import AboutPage from '../pages/AboutPage/AboutPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // Placeholder components for pages not yet implemented
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
     {
         path: '/contato',
         element: <ContactPage />,
+    },
+    {
+        path: '/sobre',
+        element: <AboutPage />,
     },
     {
         path: '/projetos',
