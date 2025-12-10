@@ -13,6 +13,8 @@ export const mockProjects: Project[] = [
         participants: 25,
         startDate: '2024-01-15',
         endDate: '2024-12-15',
+        keywords: ['educação', 'mentoria', 'tecnologia', 'empreendedorismo'],
+        isPublic: true,
     },
     {
         id: 2,
@@ -25,6 +27,8 @@ export const mockProjects: Project[] = [
         participants: 18,
         startDate: '2024-02-01',
         endDate: '2024-11-30',
+        keywords: ['meio ambiente', 'sustentabilidade', 'extensão'],
+        isPublic: true,
     },
     {
         id: 3,
@@ -37,6 +41,8 @@ export const mockProjects: Project[] = [
         participants: 30,
         startDate: '2024-03-01',
         endDate: '2024-12-31',
+        keywords: ['saúde', 'comunidade', 'extensão', 'bem-estar'],
+        isPublic: true,
     },
     {
         id: 4,
@@ -49,6 +55,8 @@ export const mockProjects: Project[] = [
         participants: 12,
         startDate: '2024-04-01',
         endDate: '2024-10-31',
+        keywords: ['tecnologia', 'informática', 'manutenção'],
+        isPublic: true,
     },
     {
         id: 5,
@@ -61,6 +69,8 @@ export const mockProjects: Project[] = [
         participants: 8,
         startDate: '2024-05-01',
         endDate: '2025-05-01',
+        keywords: ['urbanismo', 'revitalização', 'comunidade'],
+        isPublic: true,
     },
 ];
 
@@ -161,9 +171,9 @@ export const mockPendingApprovals: PendingApproval[] = [
         id: 2,
         projectTitle: 'Programa de Alfabetização Infantil',
         submittedBy: 'Profa. Juliana Mendes',
-        submissionDate: '2024-11-18',
+        submissionDate: '2024-03-10',
         status: 'pendente',
-        category: 'Educação',
+        category: 'Urbanismo',
     },
     {
         id: 3,
@@ -187,6 +197,24 @@ export const getUserById = (id: number | string) => {
 export const getCourseById = (id: number | string) => {
     return mockCourses.find(course => course.id === parseInt(id.toString()));
 };
+
+// Keywords for project filtering
+export const projectKeywords = [
+    'educação',
+    'mentoria',
+    'tecnologia',
+    'empreendedorismo',
+    'meio ambiente',
+    'sustentabilidade',
+    'extensão',
+    'saúde',
+    'comunidade',
+    'bem-estar',
+    'informática',
+    'manutenção',
+    'urbanismo',
+    'revitalização',
+];
 
 export const getProjectsByStatus = (status: Project['status']) => {
     return mockProjects.filter(project => project.status === status);

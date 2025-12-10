@@ -12,6 +12,7 @@ import EditProjectPage from '../pages/EditProjectPage/EditProjectPage';
 import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
 import AboutPage from '../pages/AboutPage/AboutPage';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
+import PublicProjectsPage from '../pages/PublicProjectsPage/PublicProjectsPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // Placeholder components for pages not yet implemented
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/projetos',
-        element: <PlaceholderPage title="Projetos Públicos" />, // Public view - will be implemented later
+        element: <PublicProjectsPage />,
     },
     {
         path: '/projetos/:id',

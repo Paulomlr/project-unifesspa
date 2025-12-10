@@ -9,6 +9,8 @@ export interface Project {
     participants: number;
     startDate: string;
     endDate: string;
+    keywords?: string[];
+    isPublic?: boolean;
 }
 
 export interface User {
