@@ -12,8 +12,9 @@ const ProjectDetailsPage = () => {
     // Find project
     const project = mockProjects.find(p => p.id === parseInt(id || '0'));
 
-    // Find coordinator
-    const coordinator = mockUsers.find(u => u.name === project?.coordinator);
+    // Find coordinator - remove "Prof." or "Profa." prefix
+    const coordinatorName = project?.coordinator.replace(/^(Prof\.|Profa\.)\s*/, '');
+    const coordinator = mockUsers.find(u => u.name === coordinatorName);
 
     if (!project) {
         return (
