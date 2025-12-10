@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Mail } from 'lucide-react';
+import { ChevronRight, Mail, Calendar, Users as UsersIcon } from 'lucide-react';
 import { mockProjects, mockUsers } from '../../services/mockData';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -31,12 +31,19 @@ const ProjectDetailsPage = () => {
         );
     }
 
-    // Status labels
+    // Status labels and colors
     const statusLabels: Record<string, string> = {
         ativo: 'Ativo',
         em_andamento: 'Em Andamento',
         planejamento: 'Planejamento',
         concluido: 'Concluído',
+    };
+
+    const statusColors: Record<string, string> = {
+        ativo: 'bg-green-100 text-green-700 border-green-200',
+        em_andamento: 'bg-blue-100 text-blue-700 border-blue-200',
+        planejamento: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+        concluido: 'bg-gray-100 text-gray-700 border-gray-200',
     };
 
     const handleSubscribe = () => {
@@ -50,153 +57,195 @@ const ProjectDetailsPage = () => {
             <Header />
 
             <main className="flex-1">
-                {/* Content Container */}
-                <div className="max-w-[900px] mx-auto px-8 py-12">
-                    {/* Breadcrumb */}
-                    <nav className="flex items-center gap-2 text-sm text-secondary-600 mb-8">
-                        <Link to="/projetos" className="hover:text-primary-500 transition">
-                            Projetos
-                        </Link>
-                        <ChevronRight size={16} />
-                        <span className="text-secondary-900">{project.title}</span>
-                    </nav>
+                {/* Hero Section with Gradient */}
+                <div className="bg-gradient-to-br from-primary-500 to-primary-600 text-white py-12">
+                    <div className="max-w-[1000px] mx-auto px-8">
+                        {/* Breadcrumb */}
+                        <nav className="flex items-center gap-2 text-sm text-white/80 mb-6">
+                            <Link to="/projetos" className="hover:text-white transition">
+                                Projetos
+                            </Link>
+                            <ChevronRight size={16} />
+                            <span className="text-white font-medium">{project.title}</span>
+                        </nav>
 
-                    {/* Title */}
-                    <h1 className="text-4xl font-extrabold text-secondary-900 mb-3">
-                        {project.title}
-                    </h1>
+                        {/* Title & Status */}
+                        <div className="flex items-start justify-between gap-6 mb-4">
+                            <h1 className="text-4xl font-extrabold leading-tight flex-1">
+                                {project.title}
+                            </h1>
+                            <span className={`px-4 py-2 rounded-full text-sm font-semibold border-2 bg-white ${statusColors[project.status]}`}>
+                                {statusLabels[project.status]}
+                            </span>
+                        </div>
 
-                    {/* Subtitle */}
-                    <p className="text-lg text-secondary-600 mb-8 leading-relaxed">
-                        {project.description}
-                    </p>
-
-                    {/* Project Image */}
-                    <div className="mb-8">
-                        <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full max-w-md rounded-lg shadow-md"
-                        />
-                    </div>
-
-                    {/* Visão Geral */}
-                    <section className="mb-10">
-                        <h2 className="text-2xl font-bold text-secondary-900 mb-4">
-                            Visão geral do projeto
-                        </h2>
-                        <p className="text-secondary-700 leading-relaxed">
-                            {project.fullDescription || `${project.description} Este projeto visa promover o desenvolvimento e bem-estar da comunidade universitária através de ações práticas e colaborativas. Com foco em resultados mensuráveis e impacto social, buscamos criar um ambiente mais inclusivo e sustentável para todos os envolvidos.`}
+                        {/* Subtitle */}
+                        <p className="text-xl text-white/90 leading-relaxed max-w-3xl">
+                            {project.description}
                         </p>
-                    </section>
 
-                    {/* Indicadores de Impacto */}
-                    <section className="mb-10">
-                        <h2 className="text-2xl font-bold text-secondary-900 mb-6">
-                            Indicadores de Impacto
-                        </h2>
-                        <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-white p-4 rounded-lg border border-secondary-200">
-                                <p className="text-sm text-secondary-600 mb-2">
-                                    Membros da comunidade atendidos
-                                </p>
-                                <p className="text-3xl font-bold text-secondary-900">
-                                    {project.impactMetrics?.membersServed || project.participants}
-                                </p>
+                        {/* Meta Info */}
+                        <div className="flex items-center gap-6 mt-6 text-white/80">
+                            <div className="flex items-center gap-2">
+                                <Calendar size={18} />
+                                <span className="text-sm">
+                                    {new Date(project.startDate).toLocaleDateString('pt-BR')} - {new Date(project.endDate).toLocaleDateString('pt-BR')}
+                                </span>
                             </div>
-                            <div className="bg-white p-4 rounded-lg border border-secondary-200">
-                                <p className="text-sm text-secondary-600 mb-2">
-                                    Oficinas realizadas
-                                </p>
-                                <p className="text-3xl font-bold text-secondary-900">
-                                    {project.impactMetrics?.workshopsHeld || 5}
-                                </p>
-                            </div>
-                            <div className="bg-white p-4 rounded-lg border border-secondary-200">
-                                <p className="text-sm text-secondary-600 mb-2">
-                                    Horas de voluntariado contribuídas
-                                </p>
-                                <p className="text-3xl font-bold text-secondary-900">
-                                    {project.impactMetrics?.volunteerHours || '1000+'}
-                                </p>
+                            <div className="flex items-center gap-2">
+                                <UsersIcon size={18} />
+                                <span className="text-sm">{project.participants} participantes</span>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </div>
 
-                    {/* Project Info */}
-                    <section className="mb-10">
-                        <div className="space-y-3">
-                            <div>
-                                <span className="font-bold text-secondary-900">Curso: </span>
-                                <span className="text-secondary-700">{project.category}</span>
-                            </div>
-
-                            <div>
-                                <span className="font-bold text-secondary-900">Status: </span>
-                                <span className="text-secondary-700">{statusLabels[project.status]}</span>
-                            </div>
-
-                            {project.keywords && project.keywords.length > 0 && (
-                                <div>
-                                    <span className="font-bold text-secondary-900">Palavras-chave: </span>
-                                    <span className="text-secondary-700">
-                                        {project.keywords.map(k => `#${k}`).join(' ')}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    </section>
-
-                    {/* Coordinator */}
-                    {coordinator && (
+                {/* Content Container */}
+                <div className="max-w-[1000px] mx-auto px-8 py-12">
+                    {/* Main Grid - Image + Content */}
+                    <div className="grid grid-cols-[400px_1fr] gap-12 mb-12 lg:grid-cols-1">
+                        {/* Left Column - Image */}
                         <div>
-                            <section className="mb-10">
-                                <h2 className="text-2xl font-bold text-secondary-900 mb-6">
-                                    Coordenador do Projeto
-                                </h2>
+                            <div className="sticky top-8">
+                                <img
+                                    src={project.image}
+                                    alt={project.title}
+                                    className="w-full rounded-xl shadow-lg"
+                                />
+                            </div>
+                        </div>
 
-                                <div className="flex items-center gap-4 mb-6">
-                                    <img
-                                        src={coordinator.photo}
-                                        alt={coordinator.name}
-                                        className="w-16 h-16 rounded-full object-cover"
-                                    />
-                                    <div>
-                                        <h3 className="font-bold text-secondary-900">
-                                            {coordinator.name}
-                                        </h3>
-                                        <p className="text-sm text-secondary-600">
-                                            {coordinator.department || coordinator.course}
+                        {/* Right Column - Content */}
+                        <div className="space-y-10">
+                            {/* Visão Geral */}
+                            <section>
+                                <h2 className="text-2xl font-bold text-secondary-900 mb-4 flex items-center gap-3">
+                                    <span className="w-1 h-8 bg-primary-500 rounded-full"></span>
+                                    Visão geral do projeto
+                                </h2>
+                                <p className="text-secondary-700 leading-relaxed text-lg">
+                                    {project.fullDescription || `${project.description} Este projeto visa promover o desenvolvimento e bem-estar da comunidade universitária através de ações práticas e colaborativas. Com foco em resultados mensuráveis e impacto social, buscamos criar um ambiente mais inclusivo e sustentável para todos os envolvidos.`}
+                                </p>
+                            </section>
+
+                            {/* Indicadores de Impacto */}
+                            <section>
+                                <h2 className="text-2xl font-bold text-secondary-900 mb-6 flex items-center gap-3">
+                                    <span className="w-1 h-8 bg-primary-500 rounded-full"></span>
+                                    Indicadores de Impacto
+                                </h2>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="bg-gradient-to-br from-primary-50 to-white p-6 rounded-xl border border-primary-100 shadow-sm hover:shadow-md transition">
+                                        <p className="text-sm text-primary-600 font-semibold mb-2 uppercase tracking-wide">
+                                            Membros atendidos
+                                        </p>
+                                        <p className="text-4xl font-extrabold text-primary-600">
+                                            {project.impactMetrics?.membersServed || project.participants}
+                                        </p>
+                                    </div>
+                                    <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition">
+                                        <p className="text-sm text-blue-600 font-semibold mb-2 uppercase tracking-wide">
+                                            Oficinas realizadas
+                                        </p>
+                                        <p className="text-4xl font-extrabold text-blue-600">
+                                            {project.impactMetrics?.workshopsHeld || 5}
+                                        </p>
+                                    </div>
+                                    <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100 shadow-sm hover:shadow-md transition">
+                                        <p className="text-sm text-green-600 font-semibold mb-2 uppercase tracking-wide">
+                                            Horas voluntariado
+                                        </p>
+                                        <p className="text-4xl font-extrabold text-green-600">
+                                            {project.impactMetrics?.volunteerHours || '1000+'}
                                         </p>
                                     </div>
                                 </div>
+                            </section>
 
-                                <div>
-                                    <p className="text-secondary-700 mb-2">
-                                        Dúvidas? Entre em contato pelo e-mail:
-                                    </p>
-                                    <a
-                                        href={`mailto:${coordinator.email}`}
-                                        className="text-primary-500 hover:text-primary-600 font-medium transition"
-                                    >
-                                        {coordinator.email}
-                                    </a>
+                            {/* Project Info */}
+                            <section className="bg-white p-6 rounded-xl border border-secondary-200 shadow-sm">
+                                <h2 className="text-xl font-bold text-secondary-900 mb-4">Informações do Projeto</h2>
+                                <div className="space-y-3">
+                                    <div className="flex items-start gap-3">
+                                        <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Curso:</span>
+                                        <span className="text-secondary-900 font-medium">{project.category}</span>
+                                    </div>
+
+                                    <div className="flex items-start gap-3">
+                                        <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Status:</span>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusColors[project.status]}`}>
+                                            {statusLabels[project.status]}
+                                        </span>
+                                    </div>
+
+                                    {project.keywords && project.keywords.length > 0 && (
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Palavras-chave:</span>
+                                            <div className="flex flex-wrap gap-2">
+                                                {project.keywords.map(keyword => (
+                                                    <span
+                                                        key={keyword}
+                                                        className="px-3 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-semibold border border-primary-100"
+                                                    >
+                                                        #{keyword}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </section>
-                        </div>)}
 
-                    {/* CTA Button - Only show if project is public and has subscription URL */}
-                    {project.isPublic && project.subscriptionFormUrl && (
-                        <div className="flex justify-end">
-                            <Button
-                                variant="primary"
-                                onClick={handleSubscribe}
-                                className="px-8 py-3"
-                            >
-                                Candidate-se ao Projeto
-                            </Button>
+                            {/* Coordinator */}
+                            {coordinator && (
+                                <section className="bg-gradient-to-br from-secondary-50 to-white p-6 rounded-xl border border-secondary-200 shadow-sm">
+                                    <h2 className="text-xl font-bold text-secondary-900 mb-4">Coordenador do Projeto</h2>
+
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <img
+                                            src={coordinator.photo}
+                                            alt={coordinator.name}
+                                            className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-md"
+                                        />
+                                        <div>
+                                            <h3 className="font-bold text-secondary-900 text-lg">
+                                                {coordinator.name}
+                                            </h3>
+                                            <p className="text-sm text-secondary-600">
+                                                {coordinator.department || coordinator.course}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-4 border-t border-secondary-200">
+                                        <p className="text-sm text-secondary-600 mb-2">
+                                            Dúvidas? Entre em contato:
+                                        </p>
+                                        <a
+                                            href={`mailto:${coordinator.email}`}
+                                            className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold transition group"
+                                        >
+                                            <Mail size={18} className="group-hover:scale-110 transition" />
+                                            {coordinator.email}
+                                        </a>
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* CTA Button */}
+                            {project.isPublic && project.subscriptionFormUrl && (
+                                <div className="pt-6">
+                                    <Button
+                                        variant="primary"
+                                        onClick={handleSubscribe}
+                                        className="w-full py-4 text-lg font-bold"
+                                    >
+                                        Candidate-se ao Projeto
+                                    </Button>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </main>
 
