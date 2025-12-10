@@ -5,7 +5,6 @@ import { Project } from '../../types';
 import { mockStatistics, mockProjects } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
-import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -13,72 +12,90 @@ const Dashboard = () => {
     const [recentProjects, setRecentProjects] = useState<Project[]>([]);
 
     useEffect(() => {
-        // Get recent projects
         setRecentProjects(mockProjects.slice(0, 5));
     }, []);
 
     return (
-        <div className={styles.dashboardLayout}>
+        <div className="flex min-h-screen bg-secondary-50">
             <Sidebar />
 
-            <main className={styles.mainContent}>
-                <div className={styles.header}>
+            <main className="flex-1 p-8 sm:p-6 overflow-y-auto">
+                {/* Header */}
+                <div className="flex justify-between items-start mb-8">
                     <div>
-                        <h1 className={styles.title}>Dashboard</h1>
-                        <p className={styles.subtitle}>Bem-vindo de volta, {user?.name}!</p>
+                        <h1 className="text-3xl font-extrabold text-secondary-800 mb-2">
+                            Dashboard
+                        </h1>
+                        <p className="text-secondary-600 text-lg">
+                            Bem-vindo de volta, {user?.name}!
+                        </p>
                     </div>
-                    <Bell className={styles.notificationIcon} size={24} />
+                    <Bell className="w-8 h-8 cursor-pointer transition-transform duration-200 hover:scale-110" />
                 </div>
 
                 {/* Statistics Cards */}
-                <div className={styles.statsGrid}>
-                    <Card className={styles.statCard}>
-                        <div className={styles.statContent}>
-                            <div className={styles.statInfo}>
-                                <p className={styles.statLabel}>Total de Projetos</p>
-                                <h3 className={styles.statValue}>{stats.totalProjects}</h3>
-                                <p className={styles.statChange}>+{stats.projectsThisMonth} este mês</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    {/* Total de Projetos */}
+                    <Card className="bg-white rounded-xl p-6">
+                        <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                                <p className="text-sm text-secondary-600 mb-2">Total de Projetos</p>
+                                <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
+                                    {stats.totalProjects}
+                                </h3>
+                                <p className="text-sm text-secondary-600">
+                                    +{stats.projectsThisMonth} este mês
+                                </p>
                             </div>
-                            <div className={styles.statIcon} style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
+                            <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center">
                                 <FolderOpen size={24} />
                             </div>
                         </div>
                     </Card>
 
-                    <Card className={styles.statCard}>
-                        <div className={styles.statContent}>
-                            <div className={styles.statInfo}>
-                                <p className={styles.statLabel}>Projetos Ativos</p>
-                                <h3 className={styles.statValue}>{stats.activeProjects}</h3>
-                                <p className={styles.statChange}>Em andamento</p>
+                    {/* Projetos Ativos */}
+                    <Card className="bg-white rounded-xl p-6">
+                        <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                                <p className="text-sm text-secondary-600 mb-2">Projetos Ativos</p>
+                                <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
+                                    {stats.activeProjects}
+                                </h3>
+                                <p className="text-sm text-secondary-600">Em andamento</p>
                             </div>
-                            <div className={styles.statIcon} style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
+                            <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
                                 <Home size={24} />
                             </div>
                         </div>
                     </Card>
 
-                    <Card className={styles.statCard}>
-                        <div className={styles.statContent}>
-                            <div className={styles.statInfo}>
-                                <p className={styles.statLabel}>Total de Usuários</p>
-                                <h3 className={styles.statValue}>{stats.totalUsers}</h3>
-                                <p className={styles.statChange}>Participantes</p>
+                    {/* Total de Usuários */}
+                    <Card className="bg-white rounded-xl p-6">
+                        <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                                <p className="text-sm text-secondary-600 mb-2">Total de Usuários</p>
+                                <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
+                                    {stats.totalUsers}
+                                </h3>
+                                <p className="text-sm text-secondary-600">Participantes</p>
                             </div>
-                            <div className={styles.statIcon} style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+                            <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
                                 <Users size={24} />
                             </div>
                         </div>
                     </Card>
 
-                    <Card className={styles.statCard}>
-                        <div className={styles.statContent}>
-                            <div className={styles.statInfo}>
-                                <p className={styles.statLabel}>Aprovações Pendentes</p>
-                                <h3 className={styles.statValue}>{stats.pendingApprovals}</h3>
-                                <p className={styles.statChange}>Aguardando</p>
+                    {/* Aprovações Pendentes */}
+                    <Card className="bg-white rounded-xl p-6">
+                        <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                                <p className="text-sm text-secondary-600 mb-2">Aprovações Pendentes</p>
+                                <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
+                                    {stats.pendingApprovals}
+                                </h3>
+                                <p className="text-sm text-secondary-600">Aguardando</p>
                             </div>
-                            <div className={styles.statIcon} style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
+                            <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
                                 <CheckSquare size={24} />
                             </div>
                         </div>
@@ -86,30 +103,51 @@ const Dashboard = () => {
                 </div>
 
                 {/* Recent Projects Table */}
-                <Card title="Projetos Recentes" className={styles.tableCard}>
-                    <div className={styles.table}>
-                        <table className={styles.dataTable}>
-                            <thead>
+                <Card className="bg-white rounded-xl">
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead className="bg-secondary-100">
                                 <tr>
-                                    <th>Projeto</th>
-                                    <th>Categoria</th>
-                                    <th>Coordenador</th>
-                                    <th>Participantes</th>
-                                    <th>Status</th>
+                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
+                                        Projeto
+                                    </th>
+                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
+                                        Categoria
+                                    </th>
+                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
+                                        Coordenador
+                                    </th>
+                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
+                                        Participantes
+                                    </th>
+                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
+                                        Status
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {recentProjects.map((project) => (
-                                    <tr key={project.id}>
-                                        <td className={styles.projectName}>{project.title}</td>
-                                        <td>{project.category}</td>
-                                        <td>{project.coordinator}</td>
-                                        <td>{project.participants}</td>
-                                        <td>
-                                            <span className={`${styles.badge} ${styles[project.status]}`}>
-                                                {project.status === 'ativo' ? 'Ativo' :
-                                                    project.status === 'em_andamento' ? 'Em Andamento' :
-                                                        'Planejamento'}
+                                    <tr key={project.id} className="border-t border-secondary-200">
+                                        <td className="font-semibold text-secondary-800 p-4">
+                                            {project.title}
+                                        </td>
+                                        <td className="p-4 text-secondary-600">{project.category}</td>
+                                        <td className="p-4 text-secondary-600">{project.coordinator}</td>
+                                        <td className="p-4 text-secondary-600">{project.participants}</td>
+                                        <td className="p-4">
+                                            <span
+                                                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${project.status === 'ativo'
+                                                        ? 'bg-primary-100 text-primary-500'
+                                                        : project.status === 'em_andamento'
+                                                            ? 'bg-yellow-100 text-yellow-600'
+                                                            : 'bg-blue-100 text-blue-600'
+                                                    }`}
+                                            >
+                                                {project.status === 'ativo'
+                                                    ? 'Ativo'
+                                                    : project.status === 'em_andamento'
+                                                        ? 'Em Andamento'
+                                                        : 'Planejamento'}
                                             </span>
                                         </td>
                                     </tr>

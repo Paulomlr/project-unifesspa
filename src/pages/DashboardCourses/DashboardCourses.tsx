@@ -4,7 +4,6 @@ import { mockCourses } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
-import styles from './DashboardCourses.module.css';
 
 const DashboardCourses = () => {
     const [courses, setCourses] = useState(mockCourses);
@@ -22,65 +21,85 @@ const DashboardCourses = () => {
     );
 
     return (
-        <div className={styles.dashboardLayout}>
+        <div className="flex min-h-screen bg-secondary-50">
             <Sidebar />
 
-            <main className={styles.mainContent}>
-                <div className={styles.header}>
+            <main className="flex-1 p-8 sm:p-6 overflow-y-auto">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div>
-                        <h1 className={styles.title}>Gerenciar Cursos</h1>
-                        <p className={styles.subtitle}>Visualize e gerencie os cursos da instituição</p>
+                        <h1 className="text-3xl font-extrabold text-secondary-800 mb-2">
+                            Gerenciar Cursos
+                        </h1>
+                        <p className="text-lg text-secondary-600">
+                            Visualize e gerencie os cursos da instituição
+                        </p>
                     </div>
-                    <Button variant="primary">
-                        + Novo Curso
-                    </Button>
+                    <Button variant="primary">+ Novo Curso</Button>
                 </div>
 
-                <Card className={styles.contentCard}>
-                    <div className={styles.toolbar}>
+                {/* Courses Table */}
+                <Card className="bg-white overflow-hidden rounded-xl">
+                    {/* Toolbar */}
+                    <div className="p-6 border-b border-secondary-200">
                         <input
                             type="text"
                             placeholder="Buscar por nome ou código..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className={styles.searchInput}
+                            className="w-full max-w-md px-4 py-3 border border-secondary-300 rounded-md text-sm text-secondary-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-100 transition"
                         />
                     </div>
 
-                    <div className={styles.tableContainer}>
-                        <table className={styles.table}>
-                            <thead>
+                    {/* Table */}
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead className="bg-secondary-50">
                                 <tr>
-                                    <th>Código</th>
-                                    <th>Nome do Curso</th>
-                                    <th>Departamento</th>
-                                    <th>Estudantes</th>
-                                    <th>Ações</th>
+                                    <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
+                                        Código
+                                    </th>
+                                    <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
+                                        Nome do Curso
+                                    </th>
+                                    <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
+                                        Departamento
+                                    </th>
+                                    <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
+                                        Estudantes
+                                    </th>
+                                    <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
+                                        Ações
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredCourses.map((course) => (
-                                    <tr key={course.id}>
-                                        <td>
-                                            <span className={styles.courseCode}>{course.code}</span>
+                                    <tr key={course.id} className="border-b border-secondary-200">
+                                        <td className="px-6 py-4">
+                                            <span className="font-mono bg-secondary-50 px-2 py-1 rounded text-sm font-semibold text-secondary-600">
+                                                {course.code}
+                                            </span>
                                         </td>
-                                        <td className={styles.courseName}>{course.name}</td>
-                                        <td>{course.department}</td>
-                                        <td>{course.students}</td>
-                                        <td>
-                                            <div className={styles.actions}>
+                                        <td className="px-6 py-4 font-semibold text-secondary-800">
+                                            {course.name}
+                                        </td>
+                                        <td className="px-6 py-4 text-secondary-800">{course.department}</td>
+                                        <td className="px-6 py-4 text-secondary-800">{course.students}</td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex gap-2">
                                                 <button
-                                                    className={styles.actionButton}
+                                                    className="w-8 h-8 rounded-md border border-secondary-300 bg-white flex items-center justify-center text-secondary-600 hover:border-primary-500 hover:bg-primary-50 transition"
                                                     title="Editar"
                                                 >
-                                                    <Pencil size={18} />
+                                                    <Pencil size={16} />
                                                 </button>
                                                 <button
-                                                    className={`${styles.actionButton} ${styles.delete}`}
+                                                    className="w-8 h-8 rounded-md border border-secondary-300 bg-white flex items-center justify-center text-error hover:border-error hover:bg-error/10 transition"
                                                     onClick={() => handleDelete(course.id)}
                                                     title="Excluir"
                                                 >
-                                                    <Trash2 size={18} />
+                                                    <Trash2 size={16} />
                                                 </button>
                                             </div>
                                         </td>

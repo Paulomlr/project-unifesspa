@@ -1,10 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
-import styles from './SubmitProjectPage.module.css';
 
 interface SubmitProjectForm {
     title: string;
@@ -26,35 +24,36 @@ const SubmitProjectPage = () => {
     };
 
     return (
-        <div className={styles.dashboardLayout}>
+        <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
 
-            <main className={styles.mainContent}>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>Novo Projeto</h1>
-                    <p className={styles.subtitle}>Cadastre um novo projeto de extensão</p>
+            <main className="flex-1 p-8 sm:p-6 overflow-y-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Novo Projeto</h1>
+                    <p className="text-gray-600 text-lg">Cadastre um novo projeto de extensão</p>
                 </div>
 
-                <Card className={styles.formCard}>
-                    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-                        <div className={styles.formRow}>
-                            <Input
-                                label="Título do Projeto"
-                                name="title"
-                                placeholder="Ex: Inclusão Digital na Comunidade"
-                                register={register}
-                                error={errors.title}
-                                required
-                                className={styles.fullWidth}
-                            />
-                        </div>
+                {/* Form Card */}
+                <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl w-full">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                        {/* Título */}
+                        <Input
+                            label="Título do Projeto"
+                            name="title"
+                            placeholder="Ex: Inclusão Digital na Comunidade"
+                            register={register}
+                            error={errors.title}
+                            required
+                        />
 
-                        <div className={styles.formRow}>
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Categoria *</label>
+                        {/* Categoria + Coordenador */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex flex-col">
+                                <label className="mb-1 font-semibold text-gray-700">Categoria *</label>
                                 <select
                                     {...register('category', { required: true })}
-                                    className={styles.select}
+                                    className="w-full border border-gray-300 rounded-md p-3 font-sans bg-white cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                 >
                                     <option value="">Selecione...</option>
                                     <option value="Educação">Educação</option>
@@ -75,7 +74,8 @@ const SubmitProjectPage = () => {
                             />
                         </div>
 
-                        <div className={styles.formRow}>
+                        {/* Datas */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Input
                                 label="Data de Início Prevista"
                                 name="startDate"
@@ -94,25 +94,28 @@ const SubmitProjectPage = () => {
                             />
                         </div>
 
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>Descrição Detalhada *</label>
+                        {/* Descrição */}
+                        <div className="flex flex-col">
+                            <label className="mb-1 font-semibold text-gray-700">Descrição Detalhada *</label>
                             <textarea
                                 {...register('description', { required: true })}
-                                className={styles.textarea}
                                 placeholder="Descreva os objetivos, metodologia e público-alvo do projeto..."
                                 rows={6}
+                                className="w-full border border-gray-300 rounded-md p-3 resize-vertical font-sans transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             />
                         </div>
 
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}>Imagem de Capa</label>
-                            <div className={styles.fileInputContainer}>
-                                <input type="file" className={styles.fileInput} />
-                                <span className={styles.fileHelp}>Formatos aceitos: JPG, PNG. Máx: 5MB</span>
+                        {/* Imagem de Capa */}
+                        <div className="flex flex-col">
+                            <label className="mb-1 font-semibold text-gray-700">Imagem de Capa</label>
+                            <div className="border-2 border-dashed border-gray-300 p-8 rounded-md text-center transition hover:border-green-500 hover:bg-green-50">
+                                <input type="file" className="mb-2" />
+                                <span className="text-xs text-gray-500">Formatos aceitos: JPG, PNG. Máx: 5MB</span>
                             </div>
                         </div>
 
-                        <div className={styles.actions}>
+                        {/* Ações */}
+                        <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
                             <Button type="button" variant="outline" onClick={() => navigate('/dashboard/projetos')}>
                                 Cancelar
                             </Button>
@@ -121,7 +124,7 @@ const SubmitProjectPage = () => {
                             </Button>
                         </div>
                     </form>
-                </Card>
+                </div>
             </main>
         </div>
     );

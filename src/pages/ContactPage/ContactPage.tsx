@@ -4,7 +4,6 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
-import styles from './ContactPage.module.css';
 
 interface ContactForm {
     name: string;
@@ -25,26 +24,28 @@ const ContactPage = () => {
     };
 
     return (
-        <div className={styles.contactPage}>
+        <div className="min-h-screen flex flex-col">
             <Header />
 
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>Entre em Contato</h1>
-                    <p className={styles.subtitle}>
+            <div className="max-w-5xl mx-auto py-14 px-6 sm:px-8 flex-1 w-full">
+                <div className="text-center mb-16">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--color-text)] mb-4" style={{ fontSize: '2.5rem' }}>
+                        Entre em Contato
+                    </h1>
+                    <p className="text-base sm:text-lg text-[var(--color-text-secondary)]">
                         Tem alguma dúvida ou sugestão? Estamos aqui para ajudar!
                     </p>
                 </div>
 
-                <div className={styles.content}>
-                    <div className={styles.formSection}>
+                <div className="grid grid-cols-[1.5fr_1fr] gap-16 lg:grid-cols-[1fr_1fr] md:grid-cols-1">
+                    <div className="bg-white p-10 rounded-xl shadow-md">
                         {submitted && (
-                            <div className={styles.successMessage}>
+                            <div className="bg-green-100 text-[var(--color-success)] p-4 rounded-md mb-6 font-semibold border-l-4 border-l-[var(--color-success)]">
                                 ✓ Mensagem enviada com sucesso! Entraremos em contato em breve.
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6">
                             <Input
                                 label="Nome Completo"
                                 name="name"
@@ -75,19 +76,19 @@ const ContactPage = () => {
                                 required
                             />
 
-                            <div className={styles.textareaGroup}>
-                                <label htmlFor="message" className={styles.label}>
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="message" className="font-semibold text-[var(--color-text)] text-xs">
                                     Mensagem *
                                 </label>
                                 <textarea
                                     id="message"
                                     {...register('message', { required: true })}
                                     placeholder="Digite sua mensagem aqui..."
-                                    className={styles.textarea}
+                                    className="w-full py-3 px-4 border border-[var(--color-border)] rounded-md text-base focus:outline-none focus:border-[var(--color-primary)] focus:ring-3 focus:ring-[rgba(16,185,129,0.1)] transition-all duration-200"
                                     rows={6}
                                 />
                                 {errors.message && (
-                                    <span className={styles.errorMessage}>Este campo é obrigatório</span>
+                                    <span className="text-[var(--color-error)] text-xs">Este campo é obrigatório</span>
                                 )}
                             </div>
 
@@ -97,29 +98,29 @@ const ContactPage = () => {
                         </form>
                     </div>
 
-                    <div className={styles.infoSection}>
-                        <div className={styles.infoCard}>
-                            <h3 className={styles.infoTitle}>📧 Email</h3>
-                            <p className={styles.infoText}>contato@unifesspa.edu.br</p>
+                    <div className="flex flex-col gap-6">
+                        <div className="bg-white p-8 rounded-xl shadow-md transition-transform duration-300 hover:translate-y-[-4px] hover:shadow-lg">
+                            <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">📧 Email</h3>
+                            <p className="text-[var(--color-text-secondary)]">contato@unifesspa.edu.br</p>
                         </div>
 
-                        <div className={styles.infoCard}>
-                            <h3 className={styles.infoTitle}>📞 Telefone</h3>
-                            <p className={styles.infoText}>(94) 2101-5900</p>
+                        <div className="bg-white p-8 rounded-xl shadow-md transition-transform duration-300 hover:translate-y-[-4px] hover:shadow-lg">
+                            <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">📞 Telefone</h3>
+                            <p className="text-[var(--color-text-secondary)]">(94) 2101-5900</p>
                         </div>
 
-                        <div className={styles.infoCard}>
-                            <h3 className={styles.infoTitle}>📍 Endereço</h3>
-                            <p className={styles.infoText}>
+                        <div className="bg-white p-8 rounded-xl shadow-md transition-transform duration-300 hover:translate-y-[-4px] hover:shadow-lg">
+                            <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">📍 Endereço</h3>
+                            <p className="text-[var(--color-text-secondary)] leading-relaxed">
                                 Folha 31, Quadra 07, Lote Especial<br />
                                 Nova Marabá - Marabá/PA<br />
                                 CEP: 68507-590
                             </p>
                         </div>
 
-                        <div className={styles.infoCard}>
-                            <h3 className={styles.infoTitle}>🕒 Horário de Atendimento</h3>
-                            <p className={styles.infoText}>
+                        <div className="bg-white p-8 rounded-xl shadow-md transition-transform duration-300 hover:translate-y-[-4px] hover:shadow-lg">
+                            <h3 className="text-lg font-bold text-[var(--color-text)] mb-3">🕒 Horário de Atendimento</h3>
+                            <p className="text-[var(--color-text-secondary)] leading-relaxed">
                                 Segunda a Sexta-feira<br />
                                 08:00 às 18:00
                             </p>
