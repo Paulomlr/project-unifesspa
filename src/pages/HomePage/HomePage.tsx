@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Sparkles, Users, Target } from 'lucide-react';
 import { mockProjects } from '../../services/mockData';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -10,152 +11,140 @@ const HomePage = () => {
     const featuredProjects = mockProjects.slice(0, 3);
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-secondary-50">
             <Header />
 
             {/* Hero Section */}
-            <section
-                className="w-full bg-[linear-gradient(135deg,rgba(16,185,129,0.05)_0%,rgba(16,185,129,0.15)_100%)]"
-            >
-                <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-8 py-16 lg:px-8 lg:py-16 md:px-6 md:py-12">
-                    <div className="flex flex-col gap-8">
-                        <h1 className="text-[3.5rem] leading-tight font-extrabold text-[var(--color-text)] md:text-[2.5rem] sm:text-[2rem]">
-                            Conectando{' '}
-                            <span className="text-[var(--color-primary)]">Projetos</span> e{' '}
-                            <span className="text-[var(--color-primary)]">Pessoas</span>
-                        </h1>
-                        <p className="text-xl leading-relaxed text-[var(--color-text-secondary)] md:text-base">
-                            A plataforma que integra professores, comunidade e projetos universitários da UNIFESSPA.
-                            Participe de iniciativas transformadoras e contribua para o desenvolvimento acadêmico.
-                        </p>
-                        <div className="flex flex-wrap gap-4">
-                            <Button
-                                variant="primary"
-                                size="large"
-                                onClick={() => navigate('/projetos')}
-                            >
-                                Explorar Projetos
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="large"
-                                onClick={() => navigate('/cadastro')}
-                            >
-                                Cadastre-se Agora
-                            </Button>
-                        </div>
-                    </div>
+            <section className="relative bg-white text-secondary-900 overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-5">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: 'radial-gradient(circle at 2px 2px, #3B82F6 1px, transparent 0)',
+                        backgroundSize: '40px 40px'
+                    }}></div>
+                </div>
 
-                    <div className="rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-                        <img
-                            src="/src/assets/images/foto_unifesspa.png"
-                            alt="UNIFESSPA Campus"
-                            className="w-full h-full object-cover"
-                        />
+                <div className="relative max-w-[1400px] mx-auto px-8 py-20 lg:py-24">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        {/* Left Content */}
+                        <div className="space-y-8">
+                            <div className="inline-flex items-center gap-2 bg-primary-100 px-4 py-2 rounded-full">
+                                <Sparkles size={18} className="text-primary-600" />
+                                <span className="text-sm font-semibold text-primary-600">Plataforma Oficial UNIFESSPA</span>
+                            </div>
+
+                            <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-secondary-900">
+                                Conectando{' '}
+                                <span className="text-primary-500">Projetos</span>
+                                {' '}e{' '}
+                                <span className="text-primary-500">Pessoas</span>
+                            </h1>
+
+                            <p className="text-xl text-secondary-600 leading-relaxed">
+                                A plataforma que integra professores, comunidade e projetos universitários da UNIFESSPA.
+                                Participe de iniciativas transformadoras e contribua para o desenvolvimento acadêmico.
+                            </p>
+
+                            <div className="flex flex-wrap gap-4">
+                                <Button
+                                    variant="primary"
+                                    size="large"
+                                    onClick={() => navigate('/projetos')}
+                                >
+                                    Explorar Projetos
+                                    <ArrowRight size={20} className="ml-2" />
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Right Image */}
+                        <div className="relative">
+                            <div className="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                                <img
+                                    src="/src/assets/images/foto_unifesspa.png"
+                                    alt="UNIFESSPA Campus"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Stats Section */}
-            <section className="max-w-[1400px] mx-auto my-16 px-8 md:px-8 sm:px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-8 sm:gap-4">
-                    <div className="bg-white p-8 rounded-xl text-center shadow-md transition-transform duration-300 hover:-translate-y-2">
-                        <h3 className="text-[3rem] font-extrabold text-[var(--color-primary)] mb-2">
-                            45+
+            {/* Features Section */}
+            <section className="max-w-[1400px] mx-auto px-8 py-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition">
+                        <div className="w-14 h-14 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+                            <Target className="text-primary-600" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-secondary-900 mb-3">
+                            Projetos de Impacto
                         </h3>
-                        <p className="text-base font-semibold text-[var(--color-text-secondary)]">
-                            Projetos Ativos
+                        <p className="text-secondary-600 leading-relaxed">
+                            Participe de iniciativas que transformam a comunidade universitária e geram impacto social real.
                         </p>
                     </div>
-                    <div className="bg-white p-8 rounded-xl text-center shadow-md transition-transform duration-300 hover:-translate-y-2">
-                        <h3 className="text-[3rem] font-extrabold text-[var(--color-primary)] mb-2">
-                            1250+
+
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition">
+                        <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                            <Users className="text-blue-600" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-secondary-900 mb-3">
+                            Colaboração
                         </h3>
-                        <p className="text-base font-semibold text-[var(--color-text-secondary)]">
-                            Estudantes
+                        <p className="text-secondary-600 leading-relaxed">
+                            Conecte-se com professores e colegas para desenvolver projetos inovadores juntos.
                         </p>
                     </div>
-                    <div className="bg-white p-8 rounded-xl text-center shadow-md transition-transform duration-300 hover:-translate-y-2">
-                        <h3 className="text-[3rem] font-extrabold text-[var(--color-primary)] mb-2">
-                            150+
+
+                    <div className="bg-white p-8 rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition">
+                        <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                            <Sparkles className="text-green-600" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-secondary-900 mb-3">
+                            Desenvolvimento
                         </h3>
-                        <p className="text-base font-semibold text-[var(--color-text-secondary)]">
-                            Professores
-                        </p>
-                    </div>
-                    <div className="bg-white p-8 rounded-xl text-center shadow-md transition-transform duration-300 hover:-translate-y-2">
-                        <h3 className="text-[3rem] font-extrabold text-[var(--color-primary)] mb-2">
-                            25+
-                        </h3>
-                        <p className="text-base font-semibold text-[var(--color-text-secondary)]">
-                            Cursos
+                        <p className="text-secondary-600 leading-relaxed">
+                            Desenvolva habilidades práticas e enriqueça seu currículo acadêmico com experiências reais.
                         </p>
                     </div>
                 </div>
             </section>
 
             {/* Featured Projects Section */}
-            <section className="max-w-[1400px] mx-auto my-16 px-8 md:px-8 sm:px-4">
+            <section className="max-w-[1400px] mx-auto px-8 py-16">
                 <div className="text-center mb-12">
-                    <h2 className="text-[2.5rem] font-extrabold text-[var(--color-text)] mb-4 sm:text-[2rem]">
+                    <h2 className="text-4xl font-extrabold text-secondary-900 mb-4">
                         Projetos em Destaque
                     </h2>
-                    <p className="text-[1.125rem] text-[var(--color-text-secondary)]">
+                    <p className="text-xl text-secondary-600">
                         Conheça alguns dos projetos que estão transformando a universidade
                     </p>
                 </div>
 
-                {/* Única fileira horizontal com 3 cards lado a lado */}
-                <div className="flex gap-8 overflow-x-auto pb-2">
+                {/* Projects Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     {featuredProjects.map((project) => (
-                        <div
+                        <ProjectCard
                             key={project.id}
-                            className="min-w-[350px] max-w-[350px] flex-shrink-0"
-                        >
-                            <ProjectCard
-                                project={project}
-                                onView={(p) => navigate(`/projetos/${p.id}`)}
-                            />
-                        </div>
+                            project={project}
+                            onView={(p) => navigate(`/projetos/${p.id}`)}
+                        />
                     ))}
                 </div>
 
-                <div className="flex justify-center mt-12">
+                <div className="flex justify-center">
                     <Button
                         variant="outline"
                         size="large"
                         onClick={() => navigate('/projetos')}
                     >
                         Ver Todos os Projetos
+                        <ArrowRight size={20} className="ml-2" />
                     </Button>
                 </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="bg-[linear-gradient(135deg,var(--color-primary)_0%,var(--color-primary-dark)_100%)] text-white text-center py-20 px-8 mt-16 sm:px-4">
-                <h2 className="text-[2.5rem] font-extrabold mb-4 sm:text-[2rem]">
-                    Pronto para fazer a diferença?
-                </h2>
-                <p className="text-xl mb-8 opacity-95 sm:text-base">
-                    Junte-se à comunidade e participe de projetos que transformam vidas
-                </p>
-                <div className="flex justify-center gap-4 flex-col sm:flex-row sm:flex-nowrap">
-                    <Button
-                        variant="primary"
-                        size="large"
-                        onClick={() => navigate('/cadastro')}
-                    >
-                        Começar Agora
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="large"
-                        onClick={() => navigate('/contato')}
-                    >
-                        Fale Conosco
-                    </Button>
-                </div>
-
             </section>
 
             <Footer />
