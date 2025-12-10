@@ -12,7 +12,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white shadow-md sticky top-0 z-[100]">
+        <header className="bg-gray-900 shadow-lg sticky top-0 z-[100]">
             <div
                 className="
                     max-w-[1400px] mx-auto 
@@ -36,7 +36,7 @@ const Header = () => {
                         alt="Conecta Unifesspa"
                         className="h-10 w-auto"
                     />
-                    <span className="text-2xl md:text-[1.5rem] font-extrabold text-green-500">
+                    <span className="text-2xl md:text-[1.5rem] font-extrabold text-primary-400">
                         Conecta Unifesspa
                     </span>
                 </Link>
@@ -48,7 +48,7 @@ const Header = () => {
                         order-3 w-full pt-4 border-t md:border-none 
                         md:order-none md:w-auto md:pt-0 
                         md:justify-center 
-                        border-gray-300/40 md:border-0
+                        border-gray-700 md:border-0
                     "
                 >
                     {["Home", "Sobre", "Projetos", "Contato"].map((label, i) => (
@@ -56,11 +56,11 @@ const Header = () => {
                             key={i}
                             to={`/${label === "Home" ? "" : label.toLowerCase()}`}
                             className="
-                                relative text-gray-800 font-semibold text-base no-underline
+                                relative text-gray-300 font-semibold text-base no-underline
                                 transition-colors duration-200
-                                hover:text-green-500
+                                hover:text-primary-400
                                 after:content-[''] after:absolute after:left-0 after:-bottom-1 
-                                after:h-[2px] after:w-0 after:bg-green-500 
+                                after:h-[2px] after:w-0 after:bg-primary-400 
                                 after:transition-all after:duration-300
                                 hover:after:w-full
                             "
@@ -74,7 +74,7 @@ const Header = () => {
                 <div className="flex items-center gap-4 ml-auto">
                     {isAuthenticated ? (
                         <>
-                            <span className="font-semibold text-gray-800 hidden md:inline">
+                            <span className="font-semibold text-gray-300 hidden md:inline">
                                 Olá, {user?.name}
                             </span>
 
@@ -82,12 +82,13 @@ const Header = () => {
                                 variant="outline"
                                 size="small"
                                 onClick={() => navigate('/dashboard')}
+                                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
                             >
                                 Dashboard
                             </Button>
 
                             <Button
-                                variant="secondary"
+                                variant="primary"
                                 size="small"
                                 onClick={handleLogout}
                             >
@@ -100,6 +101,7 @@ const Header = () => {
                                 variant="outline"
                                 size="small"
                                 onClick={() => navigate('/login')}
+                                className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
                             >
                                 Entrar
                             </Button>
