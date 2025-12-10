@@ -13,6 +13,7 @@ import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
 import AboutPage from '../pages/AboutPage/AboutPage';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
 import PublicProjectsPage from '../pages/PublicProjectsPage/PublicProjectsPage';
+import ProjectDetailsPage from '../pages/ProjectDetailsPage/ProjectDetailsPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // Placeholder components for pages not yet implemented
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/projetos/:id',
-        element: <PlaceholderPage title="Detalhes do Projeto" />,
+        element: <ProjectDetailsPage />,
     },
 
     // Dashboard Routes (Admin/Professor)

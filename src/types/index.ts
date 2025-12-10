@@ -11,6 +11,13 @@ export interface Project {
     endDate: string;
     keywords?: string[];
     isPublic?: boolean;
+    fullDescription?: string;
+    impactMetrics?: {
+        membersServed?: number;
+        workshopsHeld?: number;
+        volunteerHours?: number;
+    };
+    subscriptionFormUrl?: string;
 }
 
 export interface User {
@@ -48,4 +55,15 @@ export interface PendingApproval {
     submissionDate: string;
     status: 'pendente' | 'aprovado' | 'rejeitado';
     category: string;
+}
+
+export interface ProjectSubscription {
+    id: number;
+    projectId: number;
+    name: string;
+    email: string;
+    phone?: string;
+    message: string;
+    submittedAt: string;
+    status: 'pending' | 'approved' | 'rejected';
 }
