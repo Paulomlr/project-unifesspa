@@ -1,10 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '../Button/Button';
 
 const Header = () => {
     const { isAuthenticated, user, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = () => {
         logout();
@@ -51,23 +52,31 @@ const Header = () => {
                         border-gray-700 md:border-0
                     "
                 >
-                    {["Home", "Sobre", "Projetos", "Contato"].map((label, i) => (
-                        <Link
-                            key={i}
-                            to={`/${label === "Home" ? "" : label.toLowerCase()}`}
-                            className="
-                                relative text-gray-300 font-semibold text-base no-underline
-                                transition-colors duration-200
-                                hover:text-primary-400
-                                after:content-[''] after:absolute after:left-0 after:-bottom-1 
-                                after:h-[2px] after:w-0 after:bg-primary-400 
-                                after:transition-all after:duration-300
-                                hover:after:w-full
-                            "
-                        >
-                            {label}
-                        </Link>
-                    ))}
+                    {["Home", "Sobre", "Projetos", "Contato"].map((label, i) => {
+                        const path = `/${label === "Home" ? "" : label.toLowerCase()}`;
+                        const isActive = label === "Home"
+                            ? location.pathname === "/"
+                            : location.pathname.startsWith(path);
+
+                        return (
+                            <Link
+                                key={i}
+                                to={path}
+                                className={`
+                                    relative font-semibold text-base no-underline
+                                    transition-colors duration-200
+                                    hover:text-primary-400
+                                    after:content-[''] after:absolute after:left-0 after:-bottom-1 
+                                    after:h-[2px] after:bg-primary-400 
+                                    after:transition-all after:duration-300
+                                    hover:after:w-full
+                                    ${isActive ? 'text-primary-400 after:w-full' : 'text-gray-300 after:w-0'}
+                                `}
+                            >
+                                {label}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* ACTIONS */}

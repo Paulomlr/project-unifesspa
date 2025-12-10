@@ -1,4 +1,5 @@
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import HomePage from '../pages/HomePage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import ContactPage from '../pages/ContactPage/ContactPage';
@@ -16,94 +17,94 @@ import PublicProjectsPage from '../pages/PublicProjectsPage/PublicProjectsPage';
 import ProjectDetailsPage from '../pages/ProjectDetailsPage/ProjectDetailsPage';
 import ProtectedRoute from './ProtectedRoute';
 
-// Placeholder components for pages not yet implemented
-interface PlaceholderPageProps {
-    title: string;
-}
 
-const PlaceholderPage = ({ title }: PlaceholderPageProps) => (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h1>{title}</h1>
-        <p>Em desenvolvimento...</p>
-    </div>
-);
 
 const router = createBrowserRouter([
-    // Public Routes
     {
-        path: '/',
-        element: <HomePage />,
-    },
-    {
-        path: '/login',
-        element: <LoginPage />,
-    },
-    {
-        path: '/contato',
-        element: <ContactPage />,
-    },
-    {
-        path: '/sobre',
-        element: <AboutPage />,
-    },
-    {
-        path: '/projetos',
-        element: <PublicProjectsPage />,
-    },
-    {
-        path: '/projetos/:id',
-        element: <ProjectDetailsPage />,
-    },
-
-    // Dashboard Routes (Admin/Professor)
-    {
-        path: '/dashboard',
-        element: <ProtectedRoute allowedRoles={['admin', 'professor']} />,
+        element: (
+            <>
+                <ScrollToTop />
+                <Outlet />
+            </>
+        ),
         children: [
+            // Public Routes
             {
-                index: true,
-                element: <Dashboard />,
+                path: '/',
+                element: <HomePage />,
             },
             {
-                path: 'projetos',
-                element: <DashboardProjects />,
+                path: '/login',
+                element: <LoginPage />,
             },
             {
-                path: 'projetos/novo',
-                element: <SubmitProjectPage />,
+                path: '/contato',
+                element: <ContactPage />,
             },
             {
-                path: 'projetos/editar/:id',
-                element: <EditProjectPage />,
+                path: '/sobre',
+                element: <AboutPage />,
             },
             {
-                path: 'aprovacoes',
-                element: <DashboardApprovals />,
+                path: '/projetos',
+                element: <PublicProjectsPage />,
             },
             {
-                path: 'cursos',
-                element: <DashboardCourses />,
+                path: '/projetos/:id',
+                element: <ProjectDetailsPage />,
             },
 
+            // Dashboard Routes (Admin/Professor)
             {
-                path: 'professores',
-                element: <DashboardProfessors />,
+                path: '/dashboard',
+                element: <ProtectedRoute allowedRoles={['admin', 'professor']} />,
+                children: [
+                    {
+                        index: true,
+                        element: <Dashboard />,
+                    },
+                    {
+                        path: 'projetos',
+                        element: <DashboardProjects />,
+                    },
+                    {
+                        path: 'projetos/novo',
+                        element: <SubmitProjectPage />,
+                    },
+                    {
+                        path: 'projetos/editar/:id',
+                        element: <EditProjectPage />,
+                    },
+                    {
+                        path: 'aprovacoes',
+                        element: <DashboardApprovals />,
+                    },
+                    {
+                        path: 'cursos',
+                        element: <DashboardCourses />,
+                    },
+
+                    {
+                        path: 'professores',
+                        element: <DashboardProfessors />,
+                    },
+                    {
+                        path: 'perfil',
+                        element: <ProfilePage />,
+                    },
+                    {
+                        path: 'config',
+                        element: <SettingsPage />,
+                    },
+                ],
             },
+
+            // Catch all
             {
-                path: 'perfil',
-                element: <ProfilePage />,
-            },
-            {
-                path: 'config',
-                element: <SettingsPage />,
+                path: '*',
+                element: <Navigate to="/" replace />,
             },
         ],
-    },
-
-    // Catch all
-    {
-        path: '*',
-        element: <Navigate to="/" replace />,
     },
 ]);
 
