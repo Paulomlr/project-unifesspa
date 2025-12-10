@@ -66,7 +66,7 @@ const DashboardCourses = () => {
                                         Departamento
                                     </th>
                                     <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
-                                        Estudantes
+                                        Participantes
                                     </th>
                                     <th className="text-left px-6 py-4 text-sm font-semibold text-secondary-600 uppercase tracking-wide">
                                         Ações
@@ -85,7 +85,7 @@ const DashboardCourses = () => {
                                             {course.name}
                                         </td>
                                         <td className="px-6 py-4 text-secondary-800">{course.department}</td>
-                                        <td className="px-6 py-4 text-secondary-800">{course.students}</td>
+                                        <td className="px-6 py-4 text-secondary-800">{course.participants}</td>
                                         <td className="px-6 py-4">
                                             <div className="flex gap-2">
                                                 <button

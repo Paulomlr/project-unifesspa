@@ -102,15 +102,7 @@ export const mockUsers: User[] = [
         photo: '/src/assets/images/profile_photo.png',
         projects: [5],
     },
-    {
-        id: 5,
-        name: 'Pedro Almeida',
-        email: 'pedro.almeida@aluno.unifesspa.edu.br',
-        role: 'aluno',
-        course: 'Ciência da Computação',
-        photo: '/src/assets/images/profile_photo.png',
-        projects: [1, 2],
-    },
+
 ];
 
 // Mock data for courses
@@ -120,28 +112,28 @@ export const mockCourses: Course[] = [
         name: 'Ciência da Computação',
         code: 'CC',
         department: 'Instituto de Ciências Exatas',
-        students: 150,
+        participants: 150,
     },
     {
         id: 2,
         name: 'Engenharia Ambiental',
         code: 'EA',
         department: 'Instituto de Engenharia',
-        students: 120,
+        participants: 120,
     },
     {
         id: 3,
         name: 'Enfermagem',
         code: 'ENF',
         department: 'Instituto de Ciências da Saúde',
-        students: 200,
+        participants: 200,
     },
     {
         id: 4,
         name: 'Arquitetura e Urbanismo',
         code: 'AU',
         department: 'Instituto de Artes',
-        students: 80,
+        participants: 80,
     },
 ];
 

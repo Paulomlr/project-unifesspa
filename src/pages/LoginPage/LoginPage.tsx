@@ -20,11 +20,8 @@ const LoginPage = () => {
 
     if (user && data.password === 'senha123') {
       login(user);
-      if (user.role === 'aluno') {
-        navigate('/aluno/projetos');
-      } else {
-        navigate('/dashboard');
-      }
+      // All authenticated users go to dashboard
+      navigate('/dashboard');
     } else {
       setError('email', { type: 'manual', message: 'Email ou senha incorretos' });
     }
@@ -105,7 +102,7 @@ const LoginPage = () => {
             <p>
               <strong>Demo:</strong> Use qualquer email do sistema com senha: <code className="bg-gray-200 px-1 py-0.5 rounded">senha123</code>
             </p>
-            <p>Exemplo: joao.silva@unifesspa.edu.br (Professor) ou pedro.almeida@aluno.unifesspa.edu.br (Aluno)</p>
+            <p>Exemplo: joao.silva@unifesspa.edu.br (Professor)</p>
           </div>
         </div>
       </div>

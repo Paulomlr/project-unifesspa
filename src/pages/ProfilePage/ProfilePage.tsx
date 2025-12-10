@@ -47,7 +47,7 @@ const ProfilePage = () => {
                     ? 'Professor'
                     : user?.role === 'admin'
                       ? 'Administrador'
-                      : 'Aluno'}
+                      : 'Professor'}
                 </p>
                 <p className="text-secondary-600 text-sm">{user?.department || user?.course}</p>
               </div>

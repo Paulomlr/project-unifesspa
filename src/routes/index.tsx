@@ -2,13 +2,10 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import HomePage from '../pages/HomePage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import ContactPage from '../pages/ContactPage/ContactPage';
-import StudentProjectsPage from '../pages/StudentProjectsPage/StudentProjectsPage';
-import ActiveProjectsPage from '../pages/ActiveProjectsPage/ActiveProjectsPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import DashboardProjects from '../pages/DashboardProjects/DashboardProjects';
 import DashboardApprovals from '../pages/DashboardApprovals/DashboardApprovals';
 import DashboardCourses from '../pages/DashboardCourses/DashboardCourses';
-import DashboardUsers from '../pages/DashboardUsers/DashboardUsers';
 import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessors';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import EditProjectPage from '../pages/EditProjectPage/EditProjectPage';
@@ -16,7 +13,6 @@ import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
 import AboutPage from '../pages/AboutPage/AboutPage';
 import ProtectedRoute from './ProtectedRoute';
 
-// Placeholder components for pages not yet implemented
 // Placeholder components for pages not yet implemented
 interface PlaceholderPageProps {
     title: string;
@@ -49,27 +45,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/projetos',
-        element: <StudentProjectsPage />, // Public view of projects
+        element: <PlaceholderPage title="Projetos Públicos" />, // Public view - will be implemented later
     },
     {
         path: '/projetos/:id',
         element: <PlaceholderPage title="Detalhes do Projeto" />,
-    },
-
-    // Student Routes
-    {
-        path: '/aluno',
-        element: <ProtectedRoute allowedRoles={['aluno']} />,
-        children: [
-            {
-                path: 'projetos',
-                element: <StudentProjectsPage />,
-            },
-            {
-                path: 'meus-projetos',
-                element: <ActiveProjectsPage />,
-            },
-        ],
     },
 
     // Dashboard Routes (Admin/Professor)
@@ -101,10 +81,7 @@ const router = createBrowserRouter([
                 path: 'cursos',
                 element: <DashboardCourses />,
             },
-            {
-                path: 'usuarios',
-                element: <DashboardUsers />,
-            },
+
             {
                 path: 'professores',
                 element: <DashboardProfessors />,

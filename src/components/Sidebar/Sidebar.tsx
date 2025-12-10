@@ -4,7 +4,6 @@ import {
   FolderOpen,
   CheckSquare,
   BookOpen,
-  Users,
   User,
   Settings,
   GraduationCap,
@@ -21,14 +20,13 @@ const Sidebar = () => {
     { path: '/dashboard/aprovacoes', label: 'Aprovações', icon: CheckSquare, roles: ['professor', 'admin'] },
     { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['professor', 'admin'] },
     { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['professor', 'admin'] },
-    { path: '/dashboard/usuarios', label: 'Usuários', icon: Users, roles: ['professor','admin'] },
     { path: '/dashboard/perfil', label: 'Perfil', icon: User },
     { path: '/dashboard/config', label: 'Configurações', icon: Settings },
   ];
 
   const filteredMenuItems = menuItems.filter((item) => {
     if (!item.roles) return true;
-    return item.roles.includes(user?.role || 'aluno');
+    return item.roles.includes(user?.role || 'professor');
   });
 
   return (
@@ -126,8 +124,8 @@ const Sidebar = () => {
             {user?.role === 'professor'
               ? 'Professor'
               : user?.role === 'admin'
-              ? 'Administrador'
-              : 'Aluno'}
+                ? 'Administrador'
+                : 'Professor'}
           </p>
         </div>
       </div>

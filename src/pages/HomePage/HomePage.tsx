@@ -25,7 +25,7 @@ const HomePage = () => {
                             <span className="text-[var(--color-primary)]">Pessoas</span>
                         </h1>
                         <p className="text-xl leading-relaxed text-[var(--color-text-secondary)] md:text-base">
-                            A plataforma que integra alunos, professores e projetos universitários da UNIFESSPA.
+                            A plataforma que integra professores, comunidade e projetos universitários da UNIFESSPA.
                             Participe de iniciativas transformadoras e contribua para o desenvolvimento acadêmico.
                         </p>
                         <div className="flex flex-wrap gap-4">

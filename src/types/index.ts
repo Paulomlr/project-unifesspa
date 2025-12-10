@@ -15,7 +15,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: 'professor' | 'aluno' | 'admin';
+    role: 'professor' | 'admin';
     department?: string;
     course?: string;
     photo: string;
@@ -27,7 +27,7 @@ export interface Course {
     name: string;
     code: string;
     department: string;
-    students: number;
+    participants: number;
 }
 
 export interface Statistics {

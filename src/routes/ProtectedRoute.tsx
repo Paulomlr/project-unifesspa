@@ -18,10 +18,7 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     }
 
     if (allowedRoles && !allowedRoles.includes(user.role)) {
-        // Redirect to appropriate dashboard based on role
-        if (user.role === 'aluno') {
-            return <Navigate to="/aluno/projetos" replace />;
-        }
+        // Redirect to dashboard for unauthorized access
         return <Navigate to="/dashboard" replace />;
     }
 
