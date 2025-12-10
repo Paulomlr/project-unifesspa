@@ -51,7 +51,7 @@ const Header = () => {
                         border-gray-300/40 md:border-0
                     "
                 >
-                    {["Home", "Projetos", "Contato", "Sobre"].map((label, i) => (
+                    {["Home", "Sobre", "Projetos", "Contato"].map((label, i) => (
                         <Link
                             key={i}
                             to={`/${label === "Home" ? "" : label.toLowerCase()}`}

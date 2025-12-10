@@ -1,4 +1,3 @@
-import { Pencil } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { mockProjects } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -30,15 +29,12 @@ const ProfilePage = () => {
           {/* User Info Card */}
           <Card className="h-fit">
             <div className="flex flex-col items-center text-center mb-8">
-              <div className="relative mb-4">
+              <div className="mb-4">
                 <img
                   src={user?.photo || '/src/assets/images/profile_photo.png'}
                   alt={user?.name}
                   className="w-30 h-30 rounded-full object-cover border-4 border-white shadow-md"
                 />
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary-500 border-2 border-white rounded-full flex items-center justify-center hover:scale-110 transition">
-                  <Pencil size={16} className="text-white" />
-                </button>
               </div>
               <div>
                 <h2 className="text-xl font-bold text-secondary-900 mb-1">{user?.name}</h2>
@@ -68,14 +64,13 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <Button variant="primary" fullWidth>
-                Editar Perfil
-              </Button>
-              <Button variant="outline" fullWidth>
-                Alterar Senha
-              </Button>
-            </div>
+            <Button
+              variant="primary"
+              fullWidth
+              onClick={() => window.location.href = '/dashboard/config'}
+            >
+              Editar Perfil
+            </Button>
           </Card>
 
           {/* Activity / Projects Section */}

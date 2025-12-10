@@ -45,16 +45,20 @@ const Sidebar = () => {
           max-[1024px]:flex-col max-[1024px]:items-center max-[1024px]:p-6 max-[1024px]:px-2
         "
       >
-        <img src="/src/assets/logos/logo.png" className="w-10 h-auto" />
+        <Link to="/" className="hover:opacity-80 transition-opacity">
+          <img src="/src/assets/logos/logo.png" className="w-10 h-auto" alt="Logo UNIFESSPA" />
+        </Link>
 
-        <h2
+        <Link
+          to="/"
           className="
             text-1xl font-extrabold text-[var(--color-primary)]
+            hover:text-[var(--color-primary-dark)] transition-colors
             max-[1024px]:hidden
           "
         >
           Conecta Unifesspa
-        </h2>
+        </Link>
       </div>
 
       {/* NAV */}
