@@ -249,7 +249,7 @@ const ProjectDetailsPage = () => {
                             )}
 
                             {/* CTA Button */}
-                            {project.isPublic && project.subscriptionFormUrl && (
+                            {project.isPublic && project.subscriptionFormUrl && project.status === 'ACTIVE' && (
                                 <div className="pt-6">
                                     <Button
                                         variant="primary"

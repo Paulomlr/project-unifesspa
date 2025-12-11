@@ -29,7 +29,7 @@ const ProfilePage = () => {
               Gerencie suas informações e visualize suas atividades
             </p>
           </div>
-          {user?.role === 'teacher' && (
+          {(user?.role === 'teacher' || user?.role === 'admin') && (
             <Button
               variant="primary"
               onClick={() => navigate('/dashboard/projetos/novo')}
