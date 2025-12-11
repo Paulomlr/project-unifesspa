@@ -114,12 +114,6 @@ const ProjectCard = ({
               <span>{project.coordinator}</span>
             </div>
           )}
-          {showDate && (
-            <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)] font-medium ml-auto">
-              <Calendar size={14} className="text-[var(--color-primary)]" />
-              <span>{new Date(project.startDate).getFullYear()}</span>
-            </div>
-          )}
         </div>
 
         {showActions && (onEdit || onDelete) && (
