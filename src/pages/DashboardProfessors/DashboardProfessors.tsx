@@ -21,7 +21,7 @@ interface EditProfessorForm {
 }
 
 const DashboardProfessors = () => {
-    const [professors, setProfessors] = useState(mockUsers.filter(u => u.role === 'professor'));
+    const [professors, setProfessors] = useState(mockUsers.filter(u => u.role === 'teacher'));
     const [searchTerm, setSearchTerm] = useState('');
 
     // Modal States
@@ -73,7 +73,7 @@ const DashboardProfessors = () => {
             id: Date.now(),
             name: data.name,
             email: data.email,
-            role: 'professor',
+            role: 'teacher',
             department: '',
             course: '',
             photo: '/src/assets/images/profile_photo.png',

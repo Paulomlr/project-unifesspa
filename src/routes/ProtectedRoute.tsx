@@ -18,8 +18,8 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     }
 
     if (allowedRoles && !allowedRoles.includes(user.role)) {
-        // Redirect to dashboard for unauthorized access
-        return <Navigate to="/dashboard" replace />;
+        // Redirect to home for unauthorized access
+        return <Navigate to="/" replace />;
     }
 
     return <Outlet />;

@@ -29,7 +29,7 @@ const ProfilePage = () => {
               Gerencie suas informações e visualize suas atividades
             </p>
           </div>
-          {user?.role === 'professor' && (
+          {user?.role === 'teacher' && (
             <Button
               variant="primary"
               onClick={() => navigate('/dashboard/projetos/novo')}
@@ -56,7 +56,7 @@ const ProfilePage = () => {
               <div>
                 <h2 className="text-2xl font-bold text-[var(--color-text)] mb-1">{user?.name}</h2>
                 <p className="text-[var(--color-primary)] font-bold text-xs uppercase tracking-wider mb-3 bg-[var(--color-primary)]/10 px-3 py-1 rounded-full inline-block">
-                  {user?.role === 'professor'
+                  {user?.role === 'teacher'
                     ? 'Professor'
                     : user?.role === 'admin'
                       ? 'Administrador'

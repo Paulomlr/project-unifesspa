@@ -30,7 +30,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: 'professor' | 'admin';
+    role: 'teacher' | 'admin';
     department?: string;
     course?: string;
     photo: string;

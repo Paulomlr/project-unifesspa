@@ -17,15 +17,15 @@ const Sidebar = () => {
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Home },
     { path: '/dashboard/projetos', label: 'Aprovações', icon: CheckSquare },
-    { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['professor', 'admin'] },
-    { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['professor', 'admin'] },
+    { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['teacher', 'admin'] },
+    { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['teacher', 'admin'] },
     { path: '/dashboard/perfil', label: 'Perfil', icon: User },
     { path: '/dashboard/config', label: 'Configurações', icon: Settings },
   ];
 
   const filteredMenuItems = menuItems.filter((item) => {
     if (!item.roles) return true;
-    return item.roles.includes(user?.role || 'professor');
+    return item.roles.includes(user?.role || 'teacher');
   });
 
   return (
@@ -132,7 +132,7 @@ const Sidebar = () => {
               {user?.name || 'Usuário'}
             </p>
             <p className="text-xs text-gray-400 truncate">
-              {user?.role === 'professor'
+              {user?.role === 'teacher'
                 ? 'Professor'
                 : user?.role === 'admin'
                   ? 'Administrador'
