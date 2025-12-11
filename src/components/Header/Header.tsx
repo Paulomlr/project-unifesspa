@@ -90,10 +90,16 @@ const Header = () => {
                             <Button
                                 variant="outline"
                                 size="small"
-                                onClick={() => navigate('/dashboard')}
+                                onClick={() => {
+                                    if (user?.role === 'admin') {
+                                        navigate('/dashboard');
+                                    } else {
+                                        navigate('/dashboard/perfil');
+                                    }
+                                }}
                                 className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
                             >
-                                Dashboard
+                                Gerenciar Projetos
                             </Button>
 
                             <Button

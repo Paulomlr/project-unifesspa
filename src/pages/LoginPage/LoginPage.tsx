@@ -20,7 +20,7 @@ const LoginPage = () => {
 
     if (user && data.password === 'senha123') {
       login(user);
-      navigate('/dashboard');
+      navigate('/');
     } else {
       setError('email', { type: 'manual', message: 'Email ou senha incorretos' });
     }
