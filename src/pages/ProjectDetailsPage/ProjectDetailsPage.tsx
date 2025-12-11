@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Mail, Calendar, Users as UsersIcon } from 'lucide-react';
+import { ChevronRight, Mail } from 'lucide-react';
 import { mockProjects, mockUsers } from '../../services/mockData';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -94,25 +94,7 @@ const ProjectDetailsPage = () => {
                             {project.description}
                         </p>
 
-                        {/* Meta Info */}
-                        <div className="flex items-center gap-6 mt-6 text-white/80">
-                            <div className="flex items-center gap-2">
-                                <Calendar size={18} />
-                                <span className="text-sm">
-                                    {new Date(project.startDate).toLocaleDateString('pt-BR')} - {
-                                        project.endDate
-                                            ? new Date(project.endDate).toLocaleDateString('pt-BR')
-                                            : project.duration
-                                                ? new Date(new Date(project.startDate).setMonth(new Date(project.startDate).getMonth() + project.duration)).toLocaleDateString('pt-BR')
-                                                : 'Em andamento'
-                                    }
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <UsersIcon size={18} />
-                                <span className="text-sm">{project.participants} participantes</span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

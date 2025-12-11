@@ -55,7 +55,7 @@ const LoginPage = () => {
                   className="h-12 w-auto"
                 />
                 <div>
-                  <h1 className="text-2xl font-extrabold">Conecta Unifesspa</h1>
+                  <h1 className="text-2xl font-extrabold text-green-500">Conecta Unifesspa</h1>
                   <p className="text-sm text-gray-300">Plataforma de Extensão</p>
                 </div>
               </div>

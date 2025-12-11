@@ -7,6 +7,7 @@ interface ProjectCardProps {
   showActions?: boolean;
   showDate?: boolean;
   showCourse?: boolean;
+  showImage?: boolean;
   onEdit?: (project: Project) => void;
   onDelete?: (project: Project) => void;
   onView?: (project: Project) => void;
@@ -17,6 +18,7 @@ const ProjectCard = ({
   showActions = false,
   showDate = true,
   showCourse = true,
+  showImage = true,
   onEdit,
   onDelete,
   onView,
@@ -66,7 +68,7 @@ const ProjectCard = ({
       transition-all duration-300 h-full flex flex-col cursor-pointer
       hover:-translate-y-1 hover:shadow-xl group
     ">
-      {project.image && (
+      {showImage && project.image && (
         <div className="relative w-full h-[220px] overflow-hidden">
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 z-10" />
           <img

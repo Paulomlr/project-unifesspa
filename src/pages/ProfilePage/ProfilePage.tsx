@@ -107,7 +107,12 @@ const ProfilePage = () => {
                       showActions={true}
                       showDate={false}
                       showCourse={false}
-                      onView={() => navigate(`/projetos/${project.id}`)}
+                      showImage={false}
+                      onView={
+                        (project.status === 'APPROVED' || project.status === 'ACTIVE' || project.status === 'FINISHED')
+                          ? () => navigate(`/projetos/${project.id}`)
+                          : undefined
+                      }
                     />
                     {/* Edit Button - Always Visible for Active/Approved */}
                     {(project.status === 'ACTIVE' || project.status === 'APPROVED') && (

@@ -37,7 +37,7 @@ const Header = () => {
                         alt="Conecta Unifesspa"
                         className="h-10 w-auto"
                     />
-                    <span className="text-2xl md:text-[1.5rem] font-extrabold text-primary-400">
+                    <span className="text-2xl md:text-[1.5rem] font-extrabold text-green-500">
                         Conecta Unifesspa
                     </span>
                 </Link>

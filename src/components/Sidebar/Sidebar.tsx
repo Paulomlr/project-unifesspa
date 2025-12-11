@@ -61,11 +61,11 @@ const Sidebar = () => {
 
           <span
             className="
-              text-xl font-extrabold text-white
+              text-xl font-extrabold text-green-500
               max-[1024px]:hidden
             "
           >
-            Conecta <span className="text-primary-400">Unifesspa</span>
+            Conecta Unifesspa
           </span>
         </div>
       </Link>
@@ -149,7 +149,7 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-    </aside>
+    </aside >
   );
 };
 
