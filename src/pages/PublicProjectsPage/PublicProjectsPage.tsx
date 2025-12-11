@@ -25,7 +25,7 @@ const PublicProjectsPage = () => {
             if (!matchesTitle && !matchesDescription) return false;
         }
 
-        if (selectedCourse && project.category !== selectedCourse) return false;
+        if (selectedCourse && project.course !== selectedCourse) return false;
         if (selectedStatus && project.status !== selectedStatus) return false;
         if (selectedKeyword && !project.keywords?.includes(selectedKeyword)) return false;
 
@@ -123,7 +123,7 @@ const PublicProjectsPage = () => {
                         <div className="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
                             <div className="flex items-center gap-2 text-secondary-500 font-medium mr-2">
                                 <Filter size={20} />
-                                <span>Filtrar por:</span>
+                                <span className="whitespace-nowrap">Filtrar por:</span>
                             </div>
 
                             <select
@@ -166,14 +166,14 @@ const PublicProjectsPage = () => {
                             {hasActiveFilters && (
                                 <button
                                     onClick={clearFilters}
-                                    className="text-sm text-red-500 hover:text-red-700 font-medium px-3 py-2 hover:bg-red-50 rounded-lg transition"
+                                    className="text-sm text-red-500 hover:text-red-700 font-medium px-3 py-2 hover:bg-red-50 rounded-lg transition whitespace-nowrap"
                                 >
                                     Limpar filtros
                                 </button>
                             )}
                         </div>
 
-                        <div className="text-secondary-500 font-medium">
+                        <div className="text-secondary-500 font-medium whitespace-nowrap">
                             {filteredProjects.length} {filteredProjects.length === 1 ? 'projeto encontrado' : 'projetos encontrados'}
                         </div>
                     </div>
@@ -205,7 +205,7 @@ const PublicProjectsPage = () => {
                                     <div className="p-6 flex-1 flex flex-col">
                                         <div className="mb-4">
                                             <span className="text-xs font-bold text-primary-600 uppercase tracking-wider mb-2 block">
-                                                {project.category}
+                                                {project.course || project.category}
                                             </span>
                                             <h3 className="text-lg font-bold text-secondary-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
                                                 {project.title}

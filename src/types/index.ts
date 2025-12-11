@@ -4,11 +4,15 @@ export interface Project {
     description: string;
     image: string;
     status: 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'ACTIVE' | 'FINISHED';
-    category: string;
+    category?: string;
+    course?: string;
     coordinator: string;
     participants: number;
     startDate: string;
-    endDate: string;
+    endDate?: string;
+    duration?: number; // in months
+    results?: string;
+    fileUrl?: string;
     keywords?: string[];
     isPublic?: boolean;
     fullDescription?: string;

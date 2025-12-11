@@ -6,15 +6,16 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
+  className?: string;
 }
 
-const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, className = '' }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000]">
-      <div className="bg-white rounded-lg p-8 w-full max-w-md relative shadow-lg animate-[slideIn_0.3s_ease-out]">
-        
+      <div className={`bg-white rounded-lg p-8 w-full max-w-md relative shadow-lg animate-[slideIn_0.3s_ease-out] ${className}`}>
+
         <button
           className="absolute top-4 right-4 text-slate-500 hover:text-slate-800 text-xl"
           onClick={onClose}

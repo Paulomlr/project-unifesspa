@@ -92,7 +92,13 @@ const ProjectDetailsPage = () => {
                             <div className="flex items-center gap-2">
                                 <Calendar size={18} />
                                 <span className="text-sm">
-                                    {new Date(project.startDate).toLocaleDateString('pt-BR')} - {new Date(project.endDate).toLocaleDateString('pt-BR')}
+                                    {new Date(project.startDate).toLocaleDateString('pt-BR')} - {
+                                        project.endDate
+                                            ? new Date(project.endDate).toLocaleDateString('pt-BR')
+                                            : project.duration
+                                                ? new Date(new Date(project.startDate).setMonth(new Date(project.startDate).getMonth() + project.duration)).toLocaleDateString('pt-BR')
+                                                : 'Em andamento'
+                                    }
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
@@ -171,7 +177,7 @@ const ProjectDetailsPage = () => {
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3">
                                         <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Curso:</span>
-                                        <span className="text-secondary-900 font-medium">{project.category}</span>
+                                        <span className="text-secondary-900 font-medium">{project.course || project.category}</span>
                                     </div>
 
                                     <div className="flex items-start gap-3">

@@ -1,20 +1,43 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, FileText, Calendar, Clock, User, BookOpen } from 'lucide-react';
 import { mockProjects } from '../../services/mockData';
+import { Project } from '../../types';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
+import Modal from '../../components/Modal/Modal';
 
 const DashboardProjects = () => {
     const navigate = useNavigate();
-    const [projects, setProjects] = useState(mockProjects);
+    const [projects, setProjects] = useState<Project[]>(mockProjects);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleDelete = (id: number) => {
-        if (window.confirm('Tem certeza que deseja excluir este projeto?')) {
-            setProjects(projects.filter((p) => p.id !== id));
-        }
+    const handleViewDetails = (project: Project) => {
+        setSelectedProject(project);
+        setIsModalOpen(true);
+    };
+
+    const handleAccept = () => {
+        if (!selectedProject) return;
+        const updatedProjects = projects.map(p =>
+            p.id === selectedProject.id ? { ...p, status: 'APPROVED' } : p
+        );
+        setProjects(updatedProjects as Project[]);
+        setIsModalOpen(false);
+        alert(`Projeto "${selectedProject.title}" aprovado com sucesso!`);
+    };
+
+    const handleReject = () => {
+        if (!selectedProject) return;
+        const updatedProjects = projects.map(p =>
+            p.id === selectedProject.id ? { ...p, status: 'REJECTED' } : p
+        );
+        setProjects(updatedProjects as Project[]);
+        setIsModalOpen(false);
+        alert(`Projeto "${selectedProject.title}" rejeitado.`);
     };
 
     const filteredProjects = projects.filter(
@@ -22,6 +45,14 @@ const DashboardProjects = () => {
             project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             project.coordinator.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const statusConfig = {
+        'SUBMITTED': { label: 'Submetido', className: 'bg-yellow-100 text-yellow-700' },
+        'APPROVED': { label: 'Aprovado', className: 'bg-blue-100 text-blue-700' },
+        'REJECTED': { label: 'Rejeitado', className: 'bg-red-100 text-red-700' },
+        'ACTIVE': { label: 'Ativo', className: 'bg-green-100 text-green-700' },
+        'FINISHED': { label: 'Finalizado', className: 'bg-gray-100 text-gray-700' },
+    };
 
     return (
         <div className="flex min-h-screen bg-[var(--color-surface)]">
@@ -68,83 +99,168 @@ const DashboardProjects = () => {
                                         Projeto
                                     </th>
                                     <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
-                                        Categoria
-                                    </th>
-                                    <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Coordenador
                                     </th>
                                     <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Status
                                     </th>
                                     <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
-                                        Ações
+                                        Visualização
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredProjects.map((project) => (
-                                    <tr key={project.id}>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            <div className="flex items-center gap-4">
-                                                <img
-                                                    src={project.image}
-                                                    alt=""
-                                                    className="w-10 h-10 rounded-lg object-cover"
-                                                />
-                                                <span className="font-semibold">{project.title}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            {project.category}
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            {project.coordinator}
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            <span
-                                                className={[
-                                                    'inline-block px-3 py-1 rounded-full text-[0.75rem] font-semibold uppercase',
-                                                    project.status === 'ativo'
-                                                        ? 'bg-[rgba(16,185,129,0.1)] text-[var(--color-success)]'
-                                                        : project.status === 'em_andamento'
-                                                            ? 'bg-[rgba(245,158,11,0.1)] text-[var(--color-warning)]'
-                                                            : 'bg-[rgba(59,130,246,0.1)] text-[#3b82f6]',
-                                                ].join(' ')}
-                                            >
-                                                {project.status === 'ativo'
-                                                    ? 'Ativo'
-                                                    : project.status === 'em_andamento'
-                                                        ? 'Em Andamento'
-                                                        : 'Planejamento'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            <div className="flex gap-2">
-                                                <button
-                                                    className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[var(--color-surface)] hover:border-[var(--color-primary)]"
-                                                    onClick={() =>
-                                                        navigate(`/dashboard/projetos/editar/${project.id}`)
-                                                    }
-                                                    title="Editar"
+                                {filteredProjects.map((project) => {
+                                    const config = statusConfig[project.status] || { label: project.status, className: 'bg-gray-100 text-gray-700' };
+
+                                    return (
+                                        <tr key={project.id}>
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                                <div className="flex items-center gap-4">
+                                                    <img
+                                                        src={project.image}
+                                                        alt=""
+                                                        className="w-10 h-10 rounded-lg object-cover"
+                                                    />
+                                                    <span className="font-semibold">{project.title}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                                {project.coordinator}
+                                            </td>
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                                <span
+                                                    className={`inline-block px-3 py-1 rounded-full text-[0.75rem] font-semibold uppercase ${config.className}`}
                                                 >
-                                                    <Pencil size={18} />
-                                                </button>
-                                                <button
-                                                    className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[rgba(239,68,68,0.1)] hover:border-[var(--color-error)]"
-                                                    onClick={() => handleDelete(project.id)}
-                                                    title="Excluir"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                    {config.label}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:border-blue-500 hover:text-blue-600"
+                                                        onClick={() => handleViewDetails(project)}
+                                                        title="Visualizar Detalhes"
+                                                    >
+                                                        <Eye size={18} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
                 </Card>
             </main>
+
+            {/* Project Details Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Detalhes do Projeto"
+                className="max-w-2xl"
+            >
+                {selectedProject && (
+                    <div className="space-y-6">
+                        {/* Header Info */}
+                        <div className="flex items-start gap-4 pb-6 border-b border-gray-100">
+                            <img
+                                src={selectedProject.image}
+                                alt={selectedProject.title}
+                                className="w-20 h-20 rounded-lg object-cover"
+                            />
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-1">{selectedProject.title}</h3>
+                                <div className="flex items-center gap-2 text-gray-600 text-sm">
+                                    <BookOpen size={16} />
+                                    <span>{selectedProject.course || selectedProject.category}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-gray-600 text-sm mt-1">
+                                    <User size={16} />
+                                    <span>{selectedProject.coordinator}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Description */}
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">Descrição</h4>
+                            <p className="text-gray-600 leading-relaxed text-sm">
+                                {selectedProject.description}
+                            </p>
+                        </div>
+
+                        {/* Details Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                                <div className="flex items-center gap-2 text-gray-700 font-semibold mb-1">
+                                    <Calendar size={18} />
+                                    <span>Início</span>
+                                </div>
+                                <p className="text-gray-600">{new Date(selectedProject.startDate).toLocaleDateString('pt-BR')}</p>
+                            </div>
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                                <div className="flex items-center gap-2 text-gray-700 font-semibold mb-1">
+                                    <Clock size={18} />
+                                    <span>Duração</span>
+                                </div>
+                                <p className="text-gray-600">{selectedProject.duration ? `${selectedProject.duration} meses` : 'N/A'}</p>
+                            </div>
+                        </div>
+
+                        {/* Results */}
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">Resultados Esperados</h4>
+                            <p className="text-gray-600 leading-relaxed text-sm">
+                                {selectedProject.results || 'Não informado.'}
+                            </p>
+                        </div>
+
+                        {/* File */}
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">Documentação</h4>
+                            {selectedProject.fileUrl ? (
+                                <a
+                                    href={selectedProject.fileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition group"
+                                >
+                                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
+                                        <FileText size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-semibold text-gray-800 group-hover:text-primary-600 transition">Projeto_Completo.pdf</p>
+                                        <p className="text-xs text-gray-500">Clique para visualizar</p>
+                                    </div>
+                                </a>
+                            ) : (
+                                <p className="text-sm text-gray-500 italic">Nenhum arquivo anexado.</p>
+                            )}
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3 pt-6 border-t border-gray-100">
+                            <button
+                                onClick={handleReject}
+                                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-red-200 text-red-600 rounded-lg font-bold hover:bg-red-50 transition"
+                            >
+                                <XCircle size={20} />
+                                Rejeitar
+                            </button>
+                            <button
+                                onClick={handleAccept}
+                                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition shadow-md hover:shadow-lg"
+                            >
+                                <CheckCircle size={20} />
+                                Aprovar
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };
