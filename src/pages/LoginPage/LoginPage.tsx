@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, LogIn, Sparkles, GraduationCap } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { mockUsers } from '../../services/mockData';
 import Button from '../../components/Button/Button';
@@ -27,176 +27,149 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 relative overflow-hidden">
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '40px 40px'
-          }}></div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
+      </div>
 
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-40 h-40 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
+        backgroundSize: '50px 50px'
+      }}></div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-white">
-          <div className="max-w-md text-center space-y-8">
-            {/* Logo */}
-            <div className="flex justify-center mb-8">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30 shadow-2xl">
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-5xl">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Branding */}
+          <div className="text-white space-y-8">
+            {/* Logo & Title */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20">
                 <img
-                        src="/src/assets/logos/logo.png"
-                        alt="Conecta Unifesspa"
-                        className="h-10 w-auto"
-                    />
+                  src="/src/assets/logos/logo.png"
+                  alt="Conecta Unifesspa"
+                  className="h-12 w-auto"
+                />
+                <div>
+                  <h1 className="text-2xl font-extrabold">Conecta Unifesspa</h1>
+                  <p className="text-sm text-gray-300">Plataforma de Extensão</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="text-4xl lg:text-5xl font-extrabold leading-tight">
+                  Acesso para <span className="text-primary-400">Professores</span> e <span className="text-primary-400">Administradores</span>
+                </h2>
+                <p className="text-lg text-gray-300 leading-relaxed">
+                  Gerencie projetos de extensão e conecte-se com a comunidade acadêmica da UNIFESSPA.
+                </p>
               </div>
             </div>
+          </div>
 
-            {/* Title */}
-            <div className="space-y-4">
-              <h1 className="text-5xl font-extrabold leading-tight">
-                Conecta <span className="text-primary-200">Unifesspa</span>
-              </h1>
-              <p className="text-xl text-primary-100 font-medium">
-                Conectando Projetos e Pessoas
+          {/* Right Side - Login Form */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-10">
+            {/* Form Header */}
+            <div className="mb-8">
+              <h3 className="text-3xl font-extrabold text-gray-900 mb-2">
+                Bem-vindo!
+              </h3>
+              <p className="text-gray-600">
+                Entre com suas credenciais institucionais
               </p>
             </div>
 
-            {/* Features */}
-            <div className="space-y-4 pt-8">
-              {[
-                'Gerencie seus projetos de extensão',
-                'Conecte-se com a comunidade acadêmica',
-                'Acompanhe o impacto das suas iniciativas'
-              ].map((feature, index) => (
-                <div key={index} className="flex items-center gap-3 text-left">
-                  <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Sparkles size={16} className="text-primary-200" />
+            {/* Form */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email Input */}
+              <div>
+                <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
+                  Email Institucional
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail size={20} className="text-gray-400 group-focus-within:text-primary-600 transition-colors" />
                   </div>
-                  <p className="text-primary-50">{feature}</p>
+                  <input
+                    id="email"
+                    type="email"
+                    {...register('email', { required: true })}
+                    placeholder="seu.email@unifesspa.edu.br"
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-primary-500 transition-all"
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center mb-8">
-            <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <img
-                        src="/src/assets/logos/logo.png"
-                        alt="Conecta Unifesspa"
-                        className="h-10 w-auto"
-                    />
-            </div>
-          </div>
-
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
-              Bem-vindo de volta!
-            </h2>
-            <p className="text-gray-600">
-              Entre com suas credenciais para acessar sua conta
-            </p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Email Input */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail size={20} className="text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  {...register('email', { required: true })}
-                  placeholder="seu.email@unifesspa.edu.br"
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                />
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                    <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                    {errors.email.message || 'Email é obrigatório'}
+                  </p>
+                )}
               </div>
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-600">{errors.email.message || 'Email é obrigatório'}</p>
-              )}
-            </div>
 
-            {/* Password Input */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                Senha
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock size={20} className="text-gray-400" />
+              {/* Password Input */}
+              <div>
+                <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
+                  Senha
+                </label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock size={20} className="text-gray-400 group-focus-within:text-primary-600 transition-colors" />
+                  </div>
+                  <input
+                    id="password"
+                    type="password"
+                    {...register('password', { required: true })}
+                    placeholder="Digite sua senha"
+                    className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-primary-500 transition-all"
+                  />
                 </div>
-                <input
-                  id="password"
-                  type="password"
-                  {...register('password', { required: true })}
-                  placeholder="Digite sua senha"
-                  className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                />
+                {errors.password && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                    <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                    Senha é obrigatória
+                  </p>
+                )}
               </div>
-              {errors.password && (
-                <p className="mt-2 text-sm text-red-600">Senha é obrigatória</p>
-              )}
+
+              {/* Remember & Forgot */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Lembrar-me</span>
+                </label>
+                <a href="#" className="text-sm font-bold text-primary-600 hover:text-primary-700 transition-colors">
+                  Esqueceu a senha?
+                </a>
+              </div>
+
+              {/* Submit Button */}
+              <Button type="submit" variant="primary" fullWidth size="large">
+                <span className="flex items-center justify-center gap-2">
+                  Entrar
+                  <ArrowRight size={20} />
+                </span>
+              </Button>
+            </form>
+
+            {/* Demo Info */}
+            <div className="mt-8 p-4 bg-gradient-to-r from-primary-50 to-blue-50 border border-primary-200 rounded-xl">
+              <p className="text-sm text-gray-700 mb-1">
+                <span className="font-bold text-primary-700">💡 Demo:</span> Use qualquer email do sistema
+              </p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs text-gray-600">Senha:</span>
+                <code className="px-3 py-1 bg-white rounded-lg text-primary-700 font-mono text-sm border border-primary-300 font-bold">
+                  senha123
+                </code>
+              </div>
             </div>
-
-            {/* Remember & Forgot */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
-                />
-                <span className="text-sm text-gray-600">Lembrar-me</span>
-              </label>
-              <a href="#" className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors">
-                Esqueceu a senha?
-              </a>
-            </div>
-
-            {/* Submit Button */}
-            <Button type="submit" variant="primary" fullWidth size="large">
-              <LogIn size={20} className="mr-2" />
-              Entrar
-            </Button>
-          </form>
-
-          {/* Sign Up Link */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
-              Não tem uma conta?{' '}
-              <a href="/cadastro" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors">
-                Cadastre-se
-              </a>
-            </p>
-          </div>
-
-          {/* Demo Info */}
-          <div className="mt-8 p-4 bg-primary-50 border border-primary-200 rounded-xl">
-            <p className="text-sm text-gray-700">
-              <span className="font-semibold text-primary-700">Demo:</span> Use qualquer email do sistema com senha:{' '}
-              <code className="px-2 py-1 bg-white rounded text-primary-700 font-mono text-xs border border-primary-200">
-                senha123
-              </code>
-            </p>
-            <p className="text-xs text-gray-600 mt-2">
-              Exemplo: joao.silva@unifesspa.edu.br
-            </p>
           </div>
         </div>
       </div>
