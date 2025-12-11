@@ -15,10 +15,10 @@ const Sidebar = () => {
   const { user, logout } = useAuth();
 
   const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: Home },
-    { path: '/dashboard/projetos', label: 'Aprovações', icon: CheckSquare },
-    { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['teacher', 'admin'] },
-    { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['teacher', 'admin'] },
+    { path: '/dashboard', label: 'Dashboard', icon: Home, roles: ['admin'] },
+    { path: '/dashboard/projetos', label: 'Aprovações', icon: CheckSquare, roles: ['admin'] },
+    { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['admin'] },
+    { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['admin'] },
     { path: '/dashboard/perfil', label: 'Perfil', icon: User },
     { path: '/dashboard/config', label: 'Configurações', icon: Settings },
   ];

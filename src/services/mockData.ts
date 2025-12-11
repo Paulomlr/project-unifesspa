@@ -132,6 +132,15 @@ export const mockUsers: User[] = [
         photo: '/src/assets/images/profile_photo.png',
         projects: [5],
     },
+    {
+        id: 5,
+        name: 'Gabriel Silva',
+        email: 'gabriel.silva@unifesspa.edu.br',
+        role: 'admin',
+        department: 'Arquitetura e Urbanismo',
+        photo: '/src/assets/images/profile_photo.png',
+        projects: [5],
+    },
 
 ];
 
