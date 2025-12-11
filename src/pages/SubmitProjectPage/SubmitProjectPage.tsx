@@ -192,9 +192,10 @@ const SubmitProjectPage = () => {
 
                                 <div className="pt-6 flex items-center justify-end gap-4">
                                     <Button
-                                        variant="outline"
                                         type="button"
-                                        onClick={() => navigate('/dashboard/projetos')}
+                                        variant="outline"
+                                        onClick={() => navigate('/dashboard/perfil')}
+                                        className="flex-1"
                                     >
                                         Cancelar
                                     </Button>

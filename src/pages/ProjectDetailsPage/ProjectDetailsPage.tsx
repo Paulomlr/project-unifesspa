@@ -83,7 +83,14 @@ const ProjectDetailsPage = () => {
                         </div>
 
                         {/* Subtitle */}
-                        <p className="text-xl text-white/90 leading-relaxed max-w-3xl">
+                        {project.subtitle && (
+                            <p className="text-xl text-white/90 leading-relaxed max-w-3xl mb-4">
+                                {project.subtitle}
+                            </p>
+                        )}
+
+                        {/* Description (Short) */}
+                        <p className="text-lg text-white/80 leading-relaxed max-w-3xl">
                             {project.description}
                         </p>
 
@@ -133,7 +140,7 @@ const ProjectDetailsPage = () => {
                                     Visão geral do projeto
                                 </h2>
                                 <p className="text-secondary-700 leading-relaxed text-lg">
-                                    {project.fullDescription || `${project.description} Este projeto visa promover o desenvolvimento e bem-estar da comunidade universitária através de ações práticas e colaborativas. Com foco em resultados mensuráveis e impacto social, buscamos criar um ambiente mais inclusivo e sustentável para todos os envolvidos.`}
+                                    {project.overview || project.fullDescription || `${project.description} Este projeto visa promover o desenvolvimento e bem-estar da comunidade universitária através de ações práticas e colaborativas. Com foco em resultados mensuráveis e impacto social, buscamos criar um ambiente mais inclusivo e sustentável para todos os envolvidos.`}
                                 </p>
                             </section>
 

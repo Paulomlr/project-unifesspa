@@ -1,15 +1,13 @@
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Eye, CheckCircle, XCircle, FileText, Calendar, Clock, User, BookOpen, Plus } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, Calendar, Clock, User, BookOpen, FileText } from 'lucide-react';
 import { mockProjects } from '../../services/mockData';
 import { Project } from '../../types';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
-import Button from '../../components/Button/Button';
 import Modal from '../../components/Modal/Modal';
 
 const DashboardProjects = () => {
-    const navigate = useNavigate();
     const [projects, setProjects] = useState<Project[]>(mockProjects);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -67,17 +65,9 @@ const DashboardProjects = () => {
                             Aprovações
                         </h1>
                         <p className="text-[1.125rem] text-[var(--color-text-secondary)]">
-                            Gerencie os projetos pendentes de aprovação
+                            Gerencie os projetos submetidos para aprovação
                         </p>
                     </div>
-                    <Button
-                        variant="primary"
-                        onClick={() => navigate('/dashboard/projetos/novo')}
-                        className="flex items-center gap-2"
-                    >
-                        <Plus size={20} />
-                        Novo Projeto
-                    </Button>
                 </div>
 
                 {/* Card de conteúdo */}
@@ -133,7 +123,7 @@ const DashboardProjects = () => {
                                             </td>
                                             <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
                                                 <span
-                                                    className={`inline-block px-3 py-1 rounded-full text-[0.75rem] font-semibold uppercase ${config.className}`}
+                                                    className={`inline - block px - 3 py - 1 rounded - full text - [0.75rem] font - semibold uppercase ${config.className} `}
                                                 >
                                                     {config.label}
                                                 </span>

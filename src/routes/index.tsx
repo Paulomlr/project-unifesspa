@@ -6,10 +6,10 @@ import ContactPage from '../pages/ContactPage/ContactPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import DashboardProjects from '../pages/DashboardProjects/DashboardProjects';
 import DashboardCourses from '../pages/DashboardCourses/DashboardCourses';
-import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessors';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import EditProjectPage from '../pages/EditProjectPage/EditProjectPage';
 import SubmitProjectPage from '../pages/SubmitProjectPage/SubmitProjectPage';
+import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessors';
 import AboutPage from '../pages/AboutPage/AboutPage';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
 import PublicProjectsPage from '../pages/PublicProjectsPage/PublicProjectsPage';
@@ -43,6 +43,14 @@ const router = createBrowserRouter([
             {
                 path: '/sobre',
                 element: <AboutPage />,
+            },
+            {
+                path: '/projetos/novo',
+                element: <SubmitProjectPage />,
+            },
+            {
+                path: '/projetos/editar/:id',
+                element: <EditProjectPage />,
             },
             {
                 path: '/projetos',

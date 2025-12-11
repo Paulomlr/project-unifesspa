@@ -17,6 +17,8 @@ export const mockProjects: Project[] = [
         fileUrl: '/documents/projeto_mentoria.pdf',
         keywords: ['educação', 'mentoria', 'tecnologia', 'empreendedorismo'],
         isPublic: true,
+        subtitle: 'Capacitando a próxima geração de líderes tecnológicos',
+        overview: 'Este projeto visa oferecer mentoria técnica e de carreira para jovens estudantes do ensino médio e superior, conectando-os com profissionais experientes do mercado.',
     },
     {
         id: 2,
@@ -33,6 +35,8 @@ export const mockProjects: Project[] = [
         fileUrl: '/documents/projeto_verde.pdf',
         keywords: ['meio ambiente', 'sustentabilidade', 'extensão'],
         isPublic: true,
+        subtitle: 'Transformando o campus em um ambiente mais sustentável',
+        overview: 'A iniciativa busca promover a conscientização ambiental e melhorar a qualidade de vida no campus através da criação e manutenção de áreas verdes.',
     },
     {
         id: 3,
@@ -49,6 +53,8 @@ export const mockProjects: Project[] = [
         fileUrl: '/documents/projeto_saude.pdf',
         keywords: ['saúde', 'comunidade', 'extensão', 'bem-estar'],
         isPublic: true,
+        subtitle: 'Cuidando de quem cuida do futuro',
+        overview: 'Oferecemos serviços básicos de saúde, campanhas de vacinação e palestras educativas para toda a comunidade acadêmica e externa.',
     },
     {
         id: 4,
@@ -65,6 +71,8 @@ export const mockProjects: Project[] = [
         fileUrl: '/documents/projeto_manutencao.pdf',
         keywords: ['tecnologia', 'informática', 'manutenção'],
         isPublic: true,
+        subtitle: 'Recuperando tecnologia, reduzindo lixo eletrônico',
+        overview: 'Nosso objetivo é estender a vida útil dos equipamentos de informática da universidade e de escolas públicas parceiras, através de manutenção preventiva e corretiva.',
     },
     {
         id: 5,
@@ -81,6 +89,8 @@ export const mockProjects: Project[] = [
         fileUrl: '/documents/projeto_urbanismo.pdf',
         keywords: ['urbanismo', 'revitalização', 'comunidade'],
         isPublic: true,
+        subtitle: 'Planejando cidades mais humanas e inclusivas',
+        overview: 'Trabalhamos em conjunto com a comunidade para identificar problemas urbanos e propor soluções criativas e viáveis para melhorar o espaço público.',
     },
 ];
 

@@ -21,6 +21,8 @@ export interface Project {
         workshopsHeld?: number;
         volunteerHours?: number;
     };
+    subtitle?: string;
+    overview?: string;
     subscriptionFormUrl?: string;
 }
 
