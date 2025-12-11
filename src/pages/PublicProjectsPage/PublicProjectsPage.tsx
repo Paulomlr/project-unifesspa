@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Users, Filter, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { mockProjects, mockCourses, projectKeywords } from '../../services/mockData';
 import Header from '../../components/Header/Header';
@@ -187,7 +187,10 @@ const PublicProjectsPage = () => {
                                     className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group border border-secondary-100 flex flex-col"
                                 >
                                     {/* Image */}
-                                    <div className="relative h-48 overflow-hidden">
+                                    <div
+                                        className="relative h-48 overflow-hidden cursor-pointer"
+                                        onClick={() => navigate(`/projetos/${project.id}`)}
+                                    >
                                         <div className="absolute inset-0 bg-secondary-900/10 group-hover:bg-transparent transition-colors z-10"></div>
                                         <img
                                             src={project.image}
@@ -215,12 +218,7 @@ const PublicProjectsPage = () => {
                                             </p>
                                         </div>
 
-                                        <div className="mt-auto pt-4 border-t border-secondary-100 flex items-center justify-between">
-                                            <div className="flex items-center gap-2 text-sm text-secondary-500 font-medium">
-                                                <Users size={16} />
-                                                <span>{project.participants}</span>
-                                            </div>
-
+                                        <div className="mt-auto pt-4 border-t border-secondary-100 flex items-center justify-end">
                                             <button
                                                 onClick={() => navigate(`/projetos/${project.id}`)}
                                                 className="text-primary-600 font-bold text-sm hover:underline"

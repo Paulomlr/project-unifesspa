@@ -4,7 +4,7 @@ import Footer from '../../components/Footer/Footer';
 
 const AboutPage = () => {
     return (
-        <div className="min-h-screen flex flex-col bg-secondary-50">
+        <div className="min-h-screen flex flex-col bg-white">
             <Header />
 
             {/* Hero Section - Light Background for Contrast */}
@@ -35,7 +35,7 @@ const AboutPage = () => {
             </section>
 
             {/* Mission Section */}
-            <section className="py-20 px-8">
+            <section className="bg-secondary-50 py-20 px-8">
                 <div className="max-w-[1200px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="space-y-8">
@@ -126,7 +126,7 @@ const AboutPage = () => {
             </section>
 
             {/* Stats Section */}
-            <section className="py-20 px-8  text-white">
+            <section className="py-20 px-8 mb-20 text-white bg-secondary-50">
                 <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                     <div>
                         <div className="text-5xl font-extrabold text-primary-400 mb-2">10+</div>
