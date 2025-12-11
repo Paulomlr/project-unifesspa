@@ -28,8 +28,8 @@ const Header = () => {
                     className="
                         flex items-center gap-3 
                         no-underline 
-                        transition-transform duration-200 
-                        hover:scale-105
+                        transition-opacity duration-200 
+                        hover:opacity-80
                     "
                 >
                     <img
@@ -45,10 +45,10 @@ const Header = () => {
                 {/* NAVIGATION */}
                 <nav
                     className="
-                        flex items-center gap-8 justify-center flex-1 
+                        flex items-center gap-8 justify-center
                         order-3 w-full pt-4 border-t md:border-none 
                         md:order-none md:w-auto md:pt-0 
-                        md:justify-center 
+                        md:absolute md:left-1/2 md:-translate-x-1/2
                         border-gray-700 md:border-0
                     "
                 >
@@ -80,7 +80,7 @@ const Header = () => {
                 </nav>
 
                 {/* ACTIONS */}
-                <div className="flex items-center gap-4 ml-auto">
+                <div className="flex items-center gap-4">
                     {isAuthenticated ? (
                         <>
                             <span className="font-semibold text-gray-300 hidden md:inline">
