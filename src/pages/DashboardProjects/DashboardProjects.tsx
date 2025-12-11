@@ -94,7 +94,7 @@ const DashboardProjects = () => {
                                     <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Coordenador
                                     </th>
-                                    <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
+                                    <th className="text-center px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Status
                                     </th>
                                     <th className="text-center px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
@@ -121,12 +121,13 @@ const DashboardProjects = () => {
                                             <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
                                                 {project.coordinator}
                                             </td>
-                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-center">
                                                 <span
-                                                    className={`inline - block px - 3 py - 1 rounded - full text - [0.75rem] font - semibold uppercase ${config.className} `}
+                                                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${config.className}`}
                                                 >
                                                     {config.label}
                                                 </span>
+
                                             </td>
                                             <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
                                                 <div className="flex justify-center gap-2">
