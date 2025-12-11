@@ -39,27 +39,38 @@ const Sidebar = () => {
       "
     >
       {/* HEADER */}
-      <div
+      <Link
+        to="/"
         className="
-          p-8 px-6 flex items-center gap-4 border-b border-[var(--color-border)]
-          max-[1024px]:flex-col max-[1024px]:items-center max-[1024px]:p-6 max-[1024px]:px-2
-        "
+    block
+    hover:opacity-80
+    transition-opacity
+  "
       >
-        <Link to="/" className="hover:opacity-80 transition-opacity">
-          <img src="/src/assets/logos/logo.png" className="w-10 h-auto" alt="Logo UNIFESSPA" />
-        </Link>
-
-        <Link
-          to="/"
+        <div
           className="
-            text-1xl font-extrabold text-[var(--color-primary)]
-            hover:text-[var(--color-primary-dark)] transition-colors
-            max-[1024px]:hidden
-          "
+      p-8 px-6 flex items-center gap-4 border-b border-[var(--color-border)]
+      max-[1024px]:flex-col max-[1024px]:items-center max-[1024px]:p-6 max-[1024px]:px-2
+    "
         >
-          Conecta Unifesspa
-        </Link>
-      </div>
+          <img
+            src="/src/assets/logos/logo.png"
+            className="w-10 h-auto"
+            alt="Logo UNIFESSPA"
+          />
+
+          <span
+            className="
+        text-1xl font-extrabold text-[var(--color-primary)]
+        hover:text-[var(--color-primary-dark)] transition-colors
+        max-[1024px]:hidden
+      "
+          >
+            Conecta Unifesspa
+          </span>
+        </div>
+      </Link>
+
 
       {/* NAV */}
       <nav className="flex-1 py-6 flex flex-col gap-2">
