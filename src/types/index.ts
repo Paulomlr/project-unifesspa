@@ -38,9 +38,6 @@ export interface User {
 export interface Course {
     id: number;
     name: string;
-    code: string;
-    department: string;
-    participants: number;
 }
 
 export interface Statistics {

@@ -129,34 +129,25 @@ export const mockUsers: User[] = [
 export const mockCourses: Course[] = [
     {
         id: 1,
-        name: 'Ciência da Computação',
-        code: 'CC',
-        department: 'Instituto de Ciências Exatas',
-        participants: 150,
+        name: 'Engenharia da Computação',
     },
     {
         id: 2,
-        name: 'Engenharia Ambiental',
-        code: 'EA',
-        department: 'Instituto de Engenharia',
-        participants: 120,
+        name: 'Sistemas de Informação',
     },
     {
         id: 3,
-        name: 'Enfermagem',
-        code: 'ENF',
-        department: 'Instituto de Ciências da Saúde',
-        participants: 200,
+        name: 'Engenharia Civil',
     },
     {
         id: 4,
-        name: 'Arquitetura e Urbanismo',
-        code: 'AU',
-        department: 'Instituto de Artes',
-        participants: 80,
+        name: 'Agronomia',
+    },
+    {
+        id: 5,
+        name: 'Direito',
     },
 ];
-
 // Mock data for dashboard statistics
 export const mockStatistics: Statistics = {
     total: 45,
