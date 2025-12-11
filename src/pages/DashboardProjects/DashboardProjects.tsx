@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, CheckCircle, XCircle, FileText, Calendar, Clock, User, BookOpen } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, FileText, Calendar, Clock, User, BookOpen, Plus } from 'lucide-react';
 import { mockProjects } from '../../services/mockData';
 import { Project } from '../../types';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -73,8 +73,10 @@ const DashboardProjects = () => {
                     <Button
                         variant="primary"
                         onClick={() => navigate('/dashboard/projetos/novo')}
+                        className="flex items-center gap-2"
                     >
-                        + Novo Projeto
+                        <Plus size={20} />
+                        Novo Projeto
                     </Button>
                 </div>
 
