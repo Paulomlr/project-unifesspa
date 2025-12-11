@@ -13,7 +13,6 @@ const PublicProjectsPage = () => {
     const [selectedStatus, setSelectedStatus] = useState('');
     const [selectedKeyword, setSelectedKeyword] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [showFilters, setShowFilters] = useState(false);
 
     // Filter projects
     const filteredProjects = mockProjects.filter(project => {
@@ -59,17 +58,19 @@ const PublicProjectsPage = () => {
     const hasActiveFilters = searchTerm || selectedCourse || selectedStatus || selectedKeyword;
 
     const statusLabels: Record<string, string> = {
-        ativo: 'Ativo',
-        em_andamento: 'Em Andamento',
-        planejamento: 'Planejamento',
-        concluido: 'Concluído',
+        SUBMITTED: 'Submetido',
+        APPROVED: 'Aprovado',
+        REJECTED: 'Rejeitado',
+        ACTIVE: 'Ativo',
+        FINISHED: 'Finalizado',
     };
 
     const statusColors: Record<string, string> = {
-        ativo: 'bg-green-100 text-green-700 border-green-200',
-        em_andamento: 'bg-blue-100 text-blue-700 border-blue-200',
-        planejamento: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-        concluido: 'bg-gray-100 text-gray-700 border-gray-200',
+        SUBMITTED: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+        APPROVED: 'bg-blue-100 text-blue-700 border-blue-200',
+        REJECTED: 'bg-red-100 text-red-700 border-red-200',
+        ACTIVE: 'bg-green-100 text-green-700 border-green-200',
+        FINISHED: 'bg-gray-100 text-gray-700 border-gray-200',
     };
 
     return (
@@ -142,10 +143,11 @@ const PublicProjectsPage = () => {
                                 className="py-2 px-4 bg-white border border-secondary-200 rounded-lg text-sm font-medium text-secondary-700 hover:border-primary-500 focus:outline-none focus:border-primary-500 transition cursor-pointer shadow-sm"
                             >
                                 <option value="">Todos os Status</option>
-                                <option value="ativo">Ativo</option>
-                                <option value="em_andamento">Em Andamento</option>
-                                <option value="planejamento">Planejamento</option>
-                                <option value="concluido">Concluído</option>
+                                <option value="SUBMITTED">Submetido</option>
+                                <option value="APPROVED">Aprovado</option>
+                                <option value="REJECTED">Rejeitado</option>
+                                <option value="ACTIVE">Ativo</option>
+                                <option value="FINISHED">Finalizado</option>
                             </select>
 
                             <select

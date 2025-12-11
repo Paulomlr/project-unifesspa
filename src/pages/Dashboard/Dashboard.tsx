@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, FolderOpen, Home, Users, CheckSquare } from 'lucide-react';
+import { FolderOpen, Home, CheckSquare } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Project } from '../../types';
 import { mockStatistics, mockProjects } from '../../services/mockData';
@@ -30,73 +30,66 @@ const Dashboard = () => {
                             Bem-vindo de volta, {user?.name}!
                         </p>
                     </div>
-                    <Bell className="w-8 h-8 cursor-pointer transition-transform duration-200 hover:scale-110" />
                 </div>
 
                 {/* Statistics Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    {/* Total de Projetos */}
+                    {/* Total */}
                     <Card className="bg-white rounded-xl p-6">
                         <div className="flex justify-between items-start">
                             <div className="flex-1">
-                                <p className="text-sm text-secondary-600 mb-2">Total de Projetos</p>
+                                <p className="text-sm text-secondary-600 mb-2">Total de projetos</p>
                                 <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
-                                    {stats.totalProjects}
+                                    {stats.total}
                                 </h3>
-                                <p className="text-sm text-secondary-600">
-                                    +{stats.projectsThisMonth} este mês
-                                </p>
                             </div>
                             <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center">
-                                <FolderOpen size={24} />
+                                <FolderOpen size={24} className="text-primary-600" />
                             </div>
                         </div>
                     </Card>
 
-                    {/* Projetos Ativos */}
+                    {/* Active */}
                     <Card className="bg-white rounded-xl p-6">
                         <div className="flex justify-between items-start">
                             <div className="flex-1">
-                                <p className="text-sm text-secondary-600 mb-2">Projetos Ativos</p>
+                                <p className="text-sm text-secondary-600 mb-2">Projetos ativos</p>
                                 <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
-                                    {stats.activeProjects}
+                                    {stats.active}
                                 </h3>
-                                <p className="text-sm text-secondary-600">Em andamento</p>
                             </div>
                             <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <Home size={24} />
+                                <Home size={24} className="text-blue-600" />
                             </div>
                         </div>
                     </Card>
 
-                    {/* Total de Usuários */}
+                    {/* Finished */}
                     <Card className="bg-white rounded-xl p-6">
                         <div className="flex justify-between items-start">
                             <div className="flex-1">
-                                <p className="text-sm text-secondary-600 mb-2">Total de Usuários</p>
+                                <p className="text-sm text-secondary-600 mb-2">Projetos concluídos</p>
                                 <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
-                                    {stats.totalUsers}
+                                    {stats.finished}
                                 </h3>
-                                <p className="text-sm text-secondary-600">Participantes</p>
                             </div>
-                            <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
-                                <Users size={24} />
+                            <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                                <CheckSquare size={24} className="text-green-600" />
                             </div>
                         </div>
                     </Card>
 
-                    {/* Aprovações Pendentes */}
+                    {/* Inactive */}
                     <Card className="bg-white rounded-xl p-6">
                         <div className="flex justify-between items-start">
                             <div className="flex-1">
-                                <p className="text-sm text-secondary-600 mb-2">Aprovações Pendentes</p>
+                                <p className="text-sm text-secondary-600 mb-2">Projetos inativos</p>
                                 <h3 className="text-2xl font-extrabold text-secondary-800 mb-1">
-                                    {stats.pendingApprovals}
+                                    {stats.inactive}
                                 </h3>
-                                <p className="text-sm text-secondary-600">Aguardando</p>
                             </div>
-                            <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
-                                <CheckSquare size={24} />
+                            <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center">
+                                <FolderOpen size={24} className="text-gray-600" />
                             </div>
                         </div>
                     </Card>
@@ -112,13 +105,7 @@ const Dashboard = () => {
                                         Projeto
                                     </th>
                                     <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
-                                        Categoria
-                                    </th>
-                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
                                         Coordenador
-                                    </th>
-                                    <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
-                                        Participantes
                                     </th>
                                     <th className="text-left p-4 font-bold text-secondary-800 text-sm uppercase tracking-wide">
                                         Status
@@ -126,32 +113,33 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentProjects.map((project) => (
-                                    <tr key={project.id} className="border-t border-secondary-200">
-                                        <td className="font-semibold text-secondary-800 p-4">
-                                            {project.title}
-                                        </td>
-                                        <td className="p-4 text-secondary-600">{project.category}</td>
-                                        <td className="p-4 text-secondary-600">{project.coordinator}</td>
-                                        <td className="p-4 text-secondary-600">{project.participants}</td>
-                                        <td className="p-4">
-                                            <span
-                                                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${project.status === 'ativo'
-                                                        ? 'bg-primary-100 text-primary-500'
-                                                        : project.status === 'em_andamento'
-                                                            ? 'bg-yellow-100 text-yellow-600'
-                                                            : 'bg-blue-100 text-blue-600'
-                                                    }`}
-                                            >
-                                                {project.status === 'ativo'
-                                                    ? 'Ativo'
-                                                    : project.status === 'em_andamento'
-                                                        ? 'Em Andamento'
-                                                        : 'Planejamento'}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {recentProjects.map((project) => {
+                                    const statusConfig = {
+                                        'SUBMITTED': { label: 'Submetido', className: 'bg-yellow-100 text-yellow-700' },
+                                        'APPROVED': { label: 'Aprovado', className: 'bg-blue-100 text-blue-700' },
+                                        'REJECTED': { label: 'Rejeitado', className: 'bg-red-100 text-red-700' },
+                                        'ACTIVE': { label: 'Ativo', className: 'bg-green-100 text-green-700' },
+                                        'FINISHED': { label: 'Finalizado', className: 'bg-gray-100 text-gray-700' },
+                                    };
+
+                                    const config = statusConfig[project.status] || { label: project.status, className: 'bg-gray-100 text-gray-700' };
+
+                                    return (
+                                        <tr key={project.id} className="border-t border-secondary-200">
+                                            <td className="font-semibold text-secondary-800 p-4">
+                                                {project.title}
+                                            </td>
+                                            <td className="p-4 text-secondary-600">{project.coordinator}</td>
+                                            <td className="p-4">
+                                                <span
+                                                    className={`inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${config.className}`}
+                                                >
+                                                    {config.label}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

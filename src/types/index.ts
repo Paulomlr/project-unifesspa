@@ -3,7 +3,7 @@ export interface Project {
     title: string;
     description: string;
     image: string;
-    status: 'ativo' | 'em_andamento' | 'planejamento' | 'concluido';
+    status: 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'ACTIVE' | 'FINISHED';
     category: string;
     coordinator: string;
     participants: number;
@@ -40,12 +40,10 @@ export interface Course {
 }
 
 export interface Statistics {
-    totalProjects: number;
-    activeProjects: number;
-    totalUsers: number;
-    pendingApprovals: number;
-    totalCourses: number;
-    projectsThisMonth: number;
+    total: number;
+    active: number;
+    finished: number;
+    inactive: number;
 }
 
 export interface PendingApproval {

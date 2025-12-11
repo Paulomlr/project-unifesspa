@@ -7,7 +7,7 @@ export const mockProjects: Project[] = [
         title: 'Capacite os Jovens por Mentoria',
         description: 'Programa de mentoria para capacitação de jovens em tecnologia e empreendedorismo',
         image: '/src/assets/images/capacite_os_jovens_por_mentoria.png',
-        status: 'ativo',
+        status: 'ACTIVE',
         category: 'Educação',
         coordinator: 'Prof. João Silva',
         participants: 25,
@@ -21,7 +21,7 @@ export const mockProjects: Project[] = [
         title: 'Iniciativa Espaços Verdes',
         description: 'Projeto de revitalização e criação de espaços verdes no campus universitário',
         image: '/src/assets/images/iniciativa_espacos_verdes.png',
-        status: 'ativo',
+        status: 'ACTIVE',
         category: 'Meio Ambiente',
         coordinator: 'Profa. Maria Santos',
         participants: 18,
@@ -35,7 +35,7 @@ export const mockProjects: Project[] = [
         title: 'Iniciativa Saúde Comunitária',
         description: 'Programa de atenção à saúde e bem-estar da comunidade universitária',
         image: '/src/assets/images/iniciativa_saude_comunitaria.png',
-        status: 'ativo',
+        status: 'ACTIVE',
         category: 'Saúde',
         coordinator: 'Prof. Carlos Oliveira',
         participants: 30,
@@ -49,7 +49,7 @@ export const mockProjects: Project[] = [
         title: 'Montagem e Manutenção',
         description: 'Projeto de manutenção e montagem de equipamentos de informática',
         image: '/src/assets/images/montagem_manutencao.png',
-        status: 'em_andamento',
+        status: 'ACTIVE',
         category: 'Tecnologia',
         coordinator: 'Prof. Pedro Costa',
         participants: 12,
@@ -63,7 +63,7 @@ export const mockProjects: Project[] = [
         title: 'Revitalize Nossa Cidade',
         description: 'Iniciativa de revitalização urbana e melhoria da qualidade de vida',
         image: '/src/assets/images/revitalize_nossa_cidade.png',
-        status: 'planejamento',
+        status: 'SUBMITTED',
         category: 'Urbanismo',
         coordinator: 'Profa. Ana Rodrigues',
         participants: 8,
@@ -149,12 +149,10 @@ export const mockCourses: Course[] = [
 
 // Mock data for dashboard statistics
 export const mockStatistics: Statistics = {
-    totalProjects: 45,
-    activeProjects: 32,
-    totalUsers: 1250,
-    pendingApprovals: 8,
-    totalCourses: 25,
-    projectsThisMonth: 12,
+    total: 45,
+    active: 32,
+    finished: 10,
+    inactive: 3,
 };
 
 // Mock data for pending approvals
