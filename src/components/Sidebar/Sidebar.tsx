@@ -61,7 +61,7 @@ const Sidebar = () => {
 
           <span
             className="
-              text-xl font-extrabold text-green-500
+              text-xl font-extrabold text-primary-500
               max-[1024px]:hidden
             "
           >
