@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import {
   Home,
-  FolderOpen,
   CheckSquare,
   BookOpen,
   User,
@@ -17,8 +16,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Home },
-    { path: '/dashboard/projetos', label: 'Projetos', icon: FolderOpen },
-    { path: '/dashboard/aprovacoes', label: 'Aprovações', icon: CheckSquare, roles: ['professor', 'admin'] },
+    { path: '/dashboard/projetos', label: 'Aprovações', icon: CheckSquare },
     { path: '/dashboard/cursos', label: 'Cursos', icon: BookOpen, roles: ['professor', 'admin'] },
     { path: '/dashboard/professores', label: 'Professores', icon: GraduationCap, roles: ['professor', 'admin'] },
     { path: '/dashboard/perfil', label: 'Perfil', icon: User },

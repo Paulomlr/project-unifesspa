@@ -5,7 +5,6 @@ import LoginPage from '../pages/LoginPage/LoginPage';
 import ContactPage from '../pages/ContactPage/ContactPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import DashboardProjects from '../pages/DashboardProjects/DashboardProjects';
-import DashboardApprovals from '../pages/DashboardApprovals/DashboardApprovals';
 import DashboardCourses from '../pages/DashboardCourses/DashboardCourses';
 import DashboardProfessors from '../pages/DashboardProfessors/DashboardProfessors';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
@@ -74,10 +73,6 @@ const router = createBrowserRouter([
                     {
                         path: 'projetos/editar/:id',
                         element: <EditProjectPage />,
-                    },
-                    {
-                        path: 'aprovacoes',
-                        element: <DashboardApprovals />,
                     },
                     {
                         path: 'cursos',

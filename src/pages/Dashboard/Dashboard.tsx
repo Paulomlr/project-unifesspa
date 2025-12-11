@@ -12,7 +12,7 @@ const Dashboard = () => {
     const [recentProjects, setRecentProjects] = useState<Project[]>([]);
 
     useEffect(() => {
-        setRecentProjects(mockProjects.slice(0, 5));
+        setRecentProjects(mockProjects);
     }, []);
 
     return (

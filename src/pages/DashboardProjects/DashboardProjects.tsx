@@ -42,8 +42,9 @@ const DashboardProjects = () => {
 
     const filteredProjects = projects.filter(
         (project) =>
-            project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            project.coordinator.toLowerCase().includes(searchTerm.toLowerCase())
+            project.status === 'SUBMITTED' &&
+            (project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                project.coordinator.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const statusConfig = {
@@ -63,10 +64,10 @@ const DashboardProjects = () => {
                 <div className="flex items-center justify-between mb-8 max-md:flex-col max-md:items-start max-md:gap-4">
                     <div>
                         <h1 className="text-3xl font-extrabold text-[var(--color-text)] mb-2">
-                            Gerenciar Projetos
+                            Aprovações
                         </h1>
                         <p className="text-[1.125rem] text-[var(--color-text-secondary)]">
-                            Visualize e gerencie todos os projetos cadastrados
+                            Gerencie os projetos pendentes de aprovação
                         </p>
                     </div>
                     <Button
@@ -104,7 +105,7 @@ const DashboardProjects = () => {
                                     <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Status
                                     </th>
-                                    <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
+                                    <th className="text-center px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
                                         Visualização
                                     </th>
                                 </tr>
@@ -136,7 +137,7 @@ const DashboardProjects = () => {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                                <div className="flex gap-2">
+                                                <div className="flex justify-center gap-2">
                                                     <button
                                                         className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:border-blue-500 hover:text-blue-600"
                                                         onClick={() => handleViewDetails(project)}
