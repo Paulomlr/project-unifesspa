@@ -157,19 +157,6 @@ const LoginPage = () => {
                 </span>
               </Button>
             </form>
-
-            {/* Demo Info */}
-            <div className="mt-8 p-4 bg-gradient-to-r from-primary-50 to-blue-50 border border-primary-200 rounded-xl">
-              <p className="text-sm text-gray-700 mb-1">
-                <span className="font-bold text-primary-700">💡 Demo:</span> Use qualquer email do sistema
-              </p>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-gray-600">Senha:</span>
-                <code className="px-3 py-1 bg-white rounded-lg text-primary-700 font-mono text-sm border border-primary-300 font-bold">
-                  senha123
-                </code>
-              </div>
-            </div>
           </div>
         </div>
       </div>
