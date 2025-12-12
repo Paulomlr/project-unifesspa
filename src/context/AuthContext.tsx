@@ -22,28 +22,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        // Check for saved user in localStorage
         const savedUser = localStorage.getItem('user');
-        const savedToken = localStorage.getItem('token');
-        
-        if (savedUser && savedToken) {
+        if (savedUser) {
             try {
                 const parsedUser = JSON.parse(savedUser);
                 setUser(parsedUser);
-                setToken(savedToken);
                 setIsAuthenticated(true);
-                
-                authService.verifyToken(savedToken)
-                    .then((data) => {
-                        setUser(data.user);
-                        localStorage.setItem('user', JSON.stringify(data.user));
-                    })
-                    .catch(() => {
-                        logout();
-                    });
             } catch (error) {
                 console.error('Error parsing saved user:', error);
                 localStorage.removeItem('user');
-                localStorage.removeItem('token');
             }
         }
         setLoading(false);
@@ -51,21 +39,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const login = (userData: User) => {
         setUser(userData);
-        setToken(authToken);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('token', authToken);
     };
 
-    const logout = async () => {
-        if (token) {
-            await authService.logout(token);
-        }
+    const logout = () => {
         setUser(null);
-        setToken(null);
         setIsAuthenticated(false);
         localStorage.removeItem('user');
-        localStorage.removeItem('token');
     };
 
     const updateUser = (userData: User) => {
@@ -75,7 +56,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const value = {
         user,
-        token,
         isAuthenticated,
         loading,
         login,
