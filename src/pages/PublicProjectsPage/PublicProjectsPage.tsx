@@ -92,7 +92,7 @@ const PublicProjectsPage = () => {
                         <div className="max-w-2xl mx-auto relative group">
                             <div className="absolute inset-0 bg-primary-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                             <div className="relative flex items-center bg-white border-2 border-secondary-200 rounded-full shadow-lg overflow-hidden focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all">
-                                <Search className="ml-6 text-secondary-400" size={24} />
+                                <Search className="ml-6 text-secondary-400 flex-shrink-0" size={24} />
                                 <input
                                     type="text"
                                     placeholder="Busque por projetos, temas ou palavras-chave..."
@@ -101,7 +101,7 @@ const PublicProjectsPage = () => {
                                         setSearchTerm(e.target.value);
                                         setCurrentPage(1);
                                     }}
-                                    className="w-full px-4 py-4 text-lg outline-none text-secondary-900 placeholder:text-secondary-400"
+                                    className="w-full px-4 py-4 text-lg outline-none border-none ring-0 focus:ring-0 focus:outline-none text-secondary-900 placeholder:text-secondary-400"
                                 />
                                 {searchTerm && (
                                     <button
