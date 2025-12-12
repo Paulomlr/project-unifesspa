@@ -55,14 +55,14 @@ const LoginPage = () => {
                   className="h-12 w-auto"
                 />
                 <div>
-                  <h1 className="text-2xl font-extrabold text-primary-500">Conecta Unifesspa</h1>
+                  <h1 className="text-2xl font-extrabold text-primary-400">Conecta Unifesspa</h1>
                   <p className="text-sm text-gray-300">Plataforma de Extensão</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <h2 className="text-4xl lg:text-5xl font-extrabold leading-tight">
-                  Acesso para <span className="text-primary-500">Professores</span> e <span className="text-primary-500">Administradores</span>
+                  Acesso para <span className="text-primary-400">Professores</span> e <span className="text-primary-400">Administradores</span>
                 </h2>
                 <p className="text-lg text-gray-300 leading-relaxed">
                   Gerencie projetos de extensão e conecte-se com a comunidade acadêmica da UNIFESSPA.

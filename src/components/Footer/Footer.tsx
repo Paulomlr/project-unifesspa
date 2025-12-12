@@ -20,7 +20,7 @@ const Footer = () => {
                             alt="Conecta Unifesspa"
                             className="w-10 h-auto"
                         />
-                        <h3 className="text-2xl font-extrabold text-green-500">
+                        <h3 className="text-2xl font-extrabold text-primary-400">
                             Conecta Unifesspa
                         </h3>
                     </div>
