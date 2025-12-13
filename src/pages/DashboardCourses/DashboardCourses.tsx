@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Pencil, Search, BookOpen, Plus, AlertCircle, Save } from 'lucide-react';
-import { mockCourses } from '../../services/mockData';
+import { Trash2, Search, BookOpen, Plus, AlertCircle, Loader2 } from 'lucide-react';
+import { courseService } from '../../services/courseService';
 import { Course } from '../../types';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
@@ -12,18 +12,20 @@ interface CreateCourseForm {
     name: string;
 }
 
-interface EditCourseForm {
-    name: string;
+interface DeleteCourseForm {
     confirmName: string;
 }
 
 const DashboardCourses = () => {
-    const [courses, setCourses] = useState<Course[]>(mockCourses);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     // Modal States
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
     // Forms
@@ -35,12 +37,30 @@ const DashboardCourses = () => {
     } = useForm<CreateCourseForm>();
 
     const {
-        register: registerEdit,
-        handleSubmit: handleSubmitEdit,
-        setValue: setValueEdit,
-        watch: watchEdit,
-        formState: { errors: errorsEdit }
-    } = useForm<EditCourseForm>();
+        register: registerDelete,
+        handleSubmit: handleSubmitDelete,
+        reset: resetDelete,
+        watch: watchDelete,
+        formState: { errors: errorsDelete }
+    } = useForm<DeleteCourseForm>();
+
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await courseService.getAll();
+            setCourses(data);
+        } catch (err) {
+            console.error('Erro ao carregar cursos:', err);
+            setError(err instanceof Error ? err.message : 'Erro ao carregar cursos');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCourses();
+    }, []);
 
     // Handlers
     const handleOpenCreate = () => {
@@ -48,32 +68,39 @@ const DashboardCourses = () => {
         setIsCreateModalOpen(true);
     };
 
-    const handleOpenEdit = (course: Course) => {
+    const handleOpenDelete = (course: Course) => {
         setSelectedCourse(course);
-        setValueEdit('name', course.name);
-        setValueEdit('confirmName', ''); // Reset confirmation
-        setIsEditModalOpen(true);
+        resetDelete();
+        setIsDeleteModalOpen(true);
     };
 
-    const onSubmitCreate = (data: CreateCourseForm) => {
-        const newCourse: Course = {
-            id: courses.length + 1, // Simple ID generation
-            name: data.name,
-        };
-        setCourses([...courses, newCourse]);
-        setIsCreateModalOpen(false);
-        alert('Curso criado com sucesso!');
+    const onSubmitCreate = async (data: CreateCourseForm) => {
+        try {
+            setActionLoading(true);
+            await courseService.create({ name: data.name });
+            await fetchCourses();
+            setIsCreateModalOpen(false);
+            alert('Curso criado com sucesso!');
+        } catch (err) {
+            alert(err instanceof Error ? err.message : 'Erro ao criar curso');
+        } finally {
+            setActionLoading(false);
+        }
     };
 
-    const onSubmitEdit = (data: EditCourseForm) => {
+    const onSubmitDelete = async () => {
         if (!selectedCourse) return;
-
-        const updatedCourses = courses.map(c =>
-            c.id === selectedCourse.id ? { ...c, name: data.name } : c
-        );
-        setCourses(updatedCourses);
-        setIsEditModalOpen(false);
-        alert('Curso atualizado com sucesso!');
+        try {
+            setActionLoading(true);
+            await courseService.delete(selectedCourse.id);
+            await fetchCourses();
+            setIsDeleteModalOpen(false);
+            alert('Curso excluído com sucesso!');
+        } catch (err) {
+            alert(err instanceof Error ? err.message : 'Erro ao excluir curso');
+        } finally {
+            setActionLoading(false);
+        }
     };
 
     const filteredCourses = courses.filter((course) =>
@@ -123,54 +150,57 @@ const DashboardCourses = () => {
 
                     {/* Table */}
                     <div className="overflow-x-auto">
-                        <table className="w-full border-collapse">
-                            <thead>
-                                <tr>
-                                    <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em] w-20">
-                                        ID
-                                    </th>
-                                    <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
-                                        Nome do Curso
-                                    </th>
-                                    <th className="text-center px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em] w-32">
-                                        Editar
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredCourses.map((course) => (
-                                    <tr key={course.id} className="group hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text-secondary)] font-mono text-sm">
-                                            #{course.id}
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-                                                    <BookOpen size={16} />
-                                                </div>
-                                                <span className="font-medium">{course.name}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-center">
-                                            <button
-                                                className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white inline-flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[var(--color-surface)] hover:border-[var(--color-primary)] text-gray-500 hover:text-[var(--color-primary)]"
-                                                onClick={() => handleOpenEdit(course)}
-                                                title="Editar"
-                                            >
-                                                <Pencil size={16} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {filteredCourses.length === 0 && (
+                        {loading ? (
+                            <div className="flex items-center justify-center p-8">
+                                <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                                <span className="ml-2 text-secondary-600">Carregando...</span>
+                            </div>
+                        ) : error ? (
+                            <div className="p-8 text-center text-red-600">{error}</div>
+                        ) : (
+                            <table className="w-full border-collapse">
+                                <thead>
                                     <tr>
-                                        <td colSpan={3} className="px-6 py-12 text-center text-gray-500">
-                                            Nenhum curso encontrado.
-                                        </td>
+                                        <th className="text-left px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em]">
+                                            Nome do Curso
+                                        </th>
+                                        <th className="text-center px-6 py-4 bg-[var(--color-surface)] font-semibold text-[0.875rem] text-[var(--color-text-secondary)] uppercase tracking-[0.05em] w-32">
+                                            Ações
+                                        </th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {filteredCourses.map((course) => (
+                                        <tr key={course.id} className="group hover:bg-gray-50 transition-colors">
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-[var(--color-text)]">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                                                        <BookOpen size={16} />
+                                                    </div>
+                                                    <span className="font-medium">{course.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 border-b border-[var(--color-border)] align-middle text-center">
+                                                <button
+                                                    className="w-8 h-8 rounded-lg border border-[var(--color-border)] bg-white inline-flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-red-50 hover:border-red-500 text-gray-500 hover:text-red-600"
+                                                    onClick={() => handleOpenDelete(course)}
+                                                    title="Excluir"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {filteredCourses.length === 0 && (
+                                        <tr>
+                                            <td colSpan={2} className="px-6 py-12 text-center text-gray-500">
+                                                Nenhum curso encontrado.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </Card>
             </main>
@@ -218,6 +248,7 @@ const DashboardCourses = () => {
                             type="button"
                             onClick={() => setIsCreateModalOpen(false)}
                             className="!rounded-xl flex-1 py-3"
+                            disabled={actionLoading}
                         >
                             Cancelar
                         </Button>
@@ -225,73 +256,59 @@ const DashboardCourses = () => {
                             variant="primary"
                             type="submit"
                             className="!rounded-xl flex-1 py-3 shadow-lg shadow-primary-500/20"
+                            disabled={actionLoading}
                         >
-                            Criar Curso
+                            {actionLoading ? (
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                                'Criar Curso'
+                            )}
                         </Button>
                     </div>
                 </form>
             </Modal>
 
-            {/* Edit Course Modal */}
+            {/* Delete Course Modal */}
             <Modal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                title="Editar Curso"
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Excluir Curso"
                 className="!max-w-md !rounded-3xl overflow-hidden"
             >
                 <div className="mb-6 text-center">
-                    <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Pencil className="text-blue-500" size={28} />
+                    <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Trash2 className="text-red-500" size={28} />
                     </div>
                     <p className="text-gray-500 text-sm">
-                        Atualize o nome do curso. É necessário confirmar o novo nome para salvar.
+                        Tem certeza que deseja excluir o curso <strong>"{selectedCourse?.name}"</strong>? 
+                        Esta ação não pode ser desfeita.
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmitEdit(onSubmitEdit)} className="space-y-5">
+                <form onSubmit={handleSubmitDelete(onSubmitDelete)} className="space-y-5">
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
-                            Nome do Curso
+                            Digite o nome do curso para confirmar
                         </label>
                         <div className="relative group">
-                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+                            <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-500 transition-colors" size={20} />
                             <input
-                                {...registerEdit('name', { required: 'O nome do curso é obrigatório' })}
-                                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
-                                placeholder="Ex: Engenharia de Software"
-                            />
-                        </div>
-                        {errorsEdit.name && (
-                            <div className="flex items-center gap-1.5 text-red-500 text-sm mt-2 ml-1 animate-fadeIn">
-                                <AlertCircle size={14} />
-                                <span>{errorsEdit.name.message}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
-                            Confirme o Nome
-                        </label>
-                        <div className="relative group">
-                            <Save className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={20} />
-                            <input
-                                {...registerEdit('confirmName', {
-                                    required: 'A confirmação do nome é obrigatória',
+                                {...registerDelete('confirmName', {
+                                    required: 'A confirmação é obrigatória',
                                     validate: (val) => {
-                                        if (watchEdit('name') != val) {
-                                            return "Os nomes não coincidem";
+                                        if (selectedCourse?.name !== val) {
+                                            return "O nome não corresponde";
                                         }
                                     }
                                 })}
-                                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
-                                placeholder="Digite o nome novamente"
+                                className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all outline-none text-gray-800 placeholder:text-gray-400"
+                                placeholder="Digite o nome do curso"
                             />
                         </div>
-                        {errorsEdit.confirmName && (
+                        {errorsDelete.confirmName && (
                             <div className="flex items-center gap-1.5 text-red-500 text-sm mt-2 ml-1 animate-fadeIn">
                                 <AlertCircle size={14} />
-                                <span>{errorsEdit.confirmName.message}</span>
+                                <span>{errorsDelete.confirmName.message}</span>
                             </div>
                         )}
                     </div>
@@ -300,19 +317,26 @@ const DashboardCourses = () => {
                         <Button
                             variant="outline"
                             type="button"
-                            onClick={() => setIsEditModalOpen(false)}
+                            onClick={() => setIsDeleteModalOpen(false)}
                             className="!rounded-xl flex-1 py-3"
+                            disabled={actionLoading}
                         >
                             Cancelar
                         </Button>
-                        <Button
-                            variant="primary"
+                        <button
                             type="submit"
-                            className="!rounded-xl flex-1 py-3 shadow-lg shadow-primary-500/20 flex items-center justify-center gap-2"
+                            disabled={actionLoading}
+                            className="flex-1 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                            <Save size={18} />
-                            Salvar
-                        </Button>
+                            {actionLoading ? (
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                                <>
+                                    <Trash2 size={18} />
+                                    Excluir
+                                </>
+                            )}
+                        </button>
                     </div>
                 </form>
             </Modal>

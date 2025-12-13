@@ -1,31 +1,87 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, CheckCircle, Info, AlertCircle } from 'lucide-react';
+import { Upload, FileText, CheckCircle, Info, AlertCircle, Loader2 } from 'lucide-react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Button from '../../components/Button/Button';
-import { mockCourses } from '../../services/mockData';
 import { useAuth } from '../../hooks/useAuth';
+import { projectService } from '../../services/projectService';
+import { courseService } from '../../services/courseService';
+import { Course } from '../../types';
 
 interface SubmitProjectForm {
-    title: string;
-    course: string;
-    startDate: string;
-    duration: number;
+    name: string;
+    subtitle: string;
+    course_id: string;
+    start_date: string;
+    duration: string;
     description: string;
-    results: string;
-    file: FileList;
+    overview: string;
+    expected_results: string;
+    registration_form_url: string;
+    proposal_file: FileList;
 }
 
 const SubmitProjectPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm<SubmitProjectForm>();
+    
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [loadingCourses, setLoadingCourses] = useState(true);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
-    const onSubmit = (data: SubmitProjectForm) => {
-        console.log('Project Data:', { ...data, coordinator: user?.name });
-        // Here would be the API call to save the project
-        alert('Projeto submetido com sucesso!');
-        navigate('/dashboard/projetos');
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const data = await courseService.getAll();
+                setCourses(data);
+            } catch (error) {
+                console.error('Erro ao carregar cursos:', error);
+            } finally {
+                setLoadingCourses(false);
+            }
+        };
+        fetchCourses();
+    }, []);
+
+    const onSubmit = async (data: SubmitProjectForm) => {
+        setLoading(true);
+        setSubmitError(null);
+
+        try {
+            // Criar o projeto primeiro
+            const projectData = {
+                name: data.name,
+                subtitle: data.subtitle || undefined,
+                description: data.description,
+                overview: data.overview || undefined,
+                expected_results: data.expected_results || undefined,
+                start_date: data.start_date ? new Date(data.start_date).toISOString() : undefined,
+                duration: data.duration || undefined,
+                course_id: data.course_id || undefined,
+                registration_form_url: data.registration_form_url || undefined,
+                is_public: false, // Começa como não público até aprovação
+            };
+
+            const createdProject = await projectService.create(projectData);
+
+            // Se houver arquivo de proposta, fazer upload
+            if (data.proposal_file && data.proposal_file.length > 0) {
+                const formData = new FormData();
+                formData.append('proposal', data.proposal_file[0]);
+                await projectService.updateProposal(createdProject.id, formData);
+            }
+
+            alert('Projeto submetido com sucesso! Aguarde a aprovação.');
+            navigate('/dashboard/projetos');
+        } catch (error: any) {
+            console.error('Erro ao submeter projeto:', error);
+            setSubmitError(error.message || 'Erro ao submeter projeto. Tente novamente.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -44,6 +100,12 @@ const SubmitProjectPage = () => {
                         </p>
                     </div>
 
+                    {submitError && (
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                            {submitError}
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Form Section */}
                         <div className="lg:col-span-2">
@@ -59,14 +121,25 @@ const SubmitProjectPage = () => {
                                     <div className="grid grid-cols-1 gap-6">
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Título do Projeto
+                                                Nome do Projeto *
                                             </label>
                                             <input
-                                                {...register('title', { required: 'O título é obrigatório' })}
+                                                {...register('name', { required: 'O nome é obrigatório' })}
                                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
                                                 placeholder="Ex: Inclusão Digital para Idosos"
                                             />
-                                            {errors.title && <span className="text-red-500 text-sm mt-1">{errors.title.message}</span>}
+                                            {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name.message}</span>}
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                Subtítulo
+                                            </label>
+                                            <input
+                                                {...register('subtitle')}
+                                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
+                                                placeholder="Ex: Capacitação tecnológica para a terceira idade"
+                                            />
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -75,15 +148,15 @@ const SubmitProjectPage = () => {
                                                     Curso Vinculado
                                                 </label>
                                                 <select
-                                                    {...register('course', { required: 'Selecione um curso' })}
+                                                    {...register('course_id')}
                                                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none bg-white"
+                                                    disabled={loadingCourses}
                                                 >
                                                     <option value="">Selecione...</option>
-                                                    {mockCourses.map(course => (
-                                                        <option key={course.id} value={course.name}>{course.name}</option>
+                                                    {courses.map(course => (
+                                                        <option key={course.id} value={course.id}>{course.name}</option>
                                                     ))}
                                                 </select>
-                                                {errors.course && <span className="text-red-500 text-sm mt-1">{errors.course.message}</span>}
                                             </div>
 
                                             <div>
@@ -115,38 +188,47 @@ const SubmitProjectPage = () => {
                                             </label>
                                             <input
                                                 type="date"
-                                                {...register('startDate', { required: 'Data de início é obrigatória' })}
+                                                {...register('start_date')}
                                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
                                             />
-                                            {errors.startDate && <span className="text-red-500 text-sm mt-1">{errors.startDate.message}</span>}
                                         </div>
 
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Duração (meses)
+                                                Duração Prevista
                                             </label>
                                             <input
-                                                type="number"
-                                                min="1"
-                                                {...register('duration', { required: 'Duração é obrigatória', min: 1 })}
+                                                type="text"
+                                                {...register('duration')}
                                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
-                                                placeholder="Ex: 12"
+                                                placeholder="Ex: 12 meses"
                                             />
-                                            {errors.duration && <span className="text-red-500 text-sm mt-1">{errors.duration.message}</span>}
                                         </div>
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Descrição Completa
+                                            Descrição Breve *
                                         </label>
                                         <textarea
                                             {...register('description', { required: 'Descrição é obrigatória' })}
+                                            rows={3}
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none resize-none"
+                                            placeholder="Uma breve descrição do projeto..."
+                                        />
+                                        {errors.description && <span className="text-red-500 text-sm mt-1">{errors.description.message}</span>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Visão Geral / Descrição Completa
+                                        </label>
+                                        <textarea
+                                            {...register('overview')}
                                             rows={5}
                                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none resize-none"
                                             placeholder="Descreva os objetivos, metodologia e público-alvo do projeto..."
                                         />
-                                        {errors.description && <span className="text-red-500 text-sm mt-1">{errors.description.message}</span>}
                                     </div>
 
                                     <div>
@@ -154,12 +236,24 @@ const SubmitProjectPage = () => {
                                             Resultados Esperados
                                         </label>
                                         <textarea
-                                            {...register('results', { required: 'Resultados esperados são obrigatórios' })}
+                                            {...register('expected_results')}
                                             rows={4}
                                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none resize-none"
                                             placeholder="Quais impactos e resultados são esperados com este projeto?"
                                         />
-                                        {errors.results && <span className="text-red-500 text-sm mt-1">{errors.results.message}</span>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Link do Formulário de Inscrição
+                                        </label>
+                                        <input
+                                            type="url"
+                                            {...register('registration_form_url')}
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
+                                            placeholder="https://forms.google.com/..."
+                                        />
+                                        <p className="text-xs text-gray-400 mt-1">Link para o formulário de inscrição de participantes (opcional).</p>
                                     </div>
                                 </div>
 
@@ -175,7 +269,7 @@ const SubmitProjectPage = () => {
                                             type="file"
                                             id="file-upload"
                                             accept=".pdf,.doc,.docx"
-                                            {...register('file', { required: 'O arquivo do projeto é obrigatório' })}
+                                            {...register('proposal_file')}
                                             className="hidden"
                                         />
                                         <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
@@ -184,9 +278,8 @@ const SubmitProjectPage = () => {
                                             </div>
                                             <span className="text-lg font-semibold text-gray-700 mb-1">Clique para fazer upload</span>
                                             <span className="text-sm text-gray-500">ou arraste e solte o arquivo aqui</span>
-                                            <span className="text-xs text-gray-400 mt-2">PDF, DOC ou DOCX (Máx. 10MB)</span>
+                                            <span className="text-xs text-gray-400 mt-2">PDF, DOC ou DOCX (Máx. 10MB) - Opcional</span>
                                         </label>
-                                        {errors.file && <span className="text-red-500 text-sm mt-2 block">{errors.file.message}</span>}
                                     </div>
                                 </div>
 
@@ -194,8 +287,9 @@ const SubmitProjectPage = () => {
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        onClick={() => navigate('/dashboard/perfil')}
+                                        onClick={() => navigate('/dashboard/projetos')}
                                         className="flex-1"
+                                        disabled={loading}
                                     >
                                         Cancelar
                                     </Button>
@@ -203,8 +297,16 @@ const SubmitProjectPage = () => {
                                         variant="primary"
                                         type="submit"
                                         className="px-8"
+                                        disabled={loading}
                                     >
-                                        Submeter Projeto
+                                        {loading ? (
+                                            <>
+                                                <Loader2 className="animate-spin mr-2" size={18} />
+                                                Enviando...
+                                            </>
+                                        ) : (
+                                            'Submeter Projeto'
+                                        )}
                                     </Button>
                                 </div>
                             </form>

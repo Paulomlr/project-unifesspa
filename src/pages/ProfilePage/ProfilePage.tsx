@@ -1,20 +1,40 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { mockProjects } from '../../services/mockData';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import ProjectCard from '../../components/ProjectCard/ProjectCard';
-import { Plus, Edit, Mail, MapPin } from 'lucide-react';
+import { Plus, Edit, Mail, Loader2 } from 'lucide-react';
+import { projectService } from '../../services/projectService';
+import { Project } from '../../types';
 
 const ProfilePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [userProjects, setUserProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Filter projects where the user is the coordinator
-  const userProjects = mockProjects.filter(
-    p => p.coordinator === user?.name || (user?.projects && user.projects.includes(p.id))
-  );
+  useEffect(() => {
+    const fetchUserProjects = async () => {
+      if (!user?.id) return;
+      
+      try {
+        // Buscar todos os projetos e filtrar pelo criador
+        const allProjects = await projectService.getAll();
+        const myProjects = allProjects.filter(p => p.creator_id === user.id);
+        setUserProjects(myProjects);
+      } catch (err: any) {
+        console.error('Erro ao carregar projetos:', err);
+        setError('Erro ao carregar seus projetos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProjects();
+  }, [user?.id]);
 
   return (
     <div className="flex min-h-screen bg-[var(--color-surface)]">
@@ -98,58 +118,68 @@ const ProfilePage = () => {
               </span>
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {userProjects.length > 0 ? (
-                userProjects.map(project => (
-                  <div key={project.id} className="relative group">
-                    <ProjectCard
-                      project={project}
-                      showActions={true}
-                      showDate={false}
-                      showCourse={false}
-                      showImage={false}
-                      onView={
-                        (project.status === 'APPROVED' || project.status === 'ACTIVE' || project.status === 'FINISHED')
-                          ? () => navigate(`/projetos/${project.id}`)
-                          : undefined
-                      }
-                    />
-                    {/* Edit Button - Always Visible for Active/Approved */}
-                    {(project.status === 'ACTIVE' || project.status === 'APPROVED') && (
-                      <div className="absolute top-4 right-4 z-20">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/dashboard/projetos/editar/${project.id}`);
-                          }}
-                          className="bg-white/90 backdrop-blur-sm text-[var(--color-text)] p-2.5 rounded-full shadow-lg hover:bg-[var(--color-primary)] hover:text-white transition-all duration-200 border border-gray-100 hover:scale-110 active:scale-95"
-                          title="Editar Projeto"
-                        >
-                          <Edit size={18} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <Card className="col-span-full flex flex-col items-center justify-center gap-6 p-16 text-[var(--color-text-secondary)] text-center border-dashed border-2 border-[var(--color-border)] bg-gray-50/50 rounded-2xl">
-                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-2 shadow-sm border border-gray-100">
-                    <Plus className="text-gray-400" size={40} />
-                  </div>
-                  <div className="max-w-md">
-                    <p className="font-bold text-xl text-[var(--color-text)] mb-2">Nenhum projeto encontrado</p>
-                    <p className="text-sm text-[var(--color-text-secondary)]">Você ainda não submeteu nenhum projeto. Comece agora mesmo a compartilhar suas iniciativas.</p>
-                  </div>
-                  <Button
-                    variant="primary"
-                    onClick={() => navigate('/dashboard/projetos/novo')}
-                    className="!rounded-xl px-8 shadow-lg shadow-[var(--color-primary)]/20"
-                  >
-                    Submeter Primeiro Projeto
-                  </Button>
-                </Card>
-              )}
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="animate-spin text-primary-500" size={48} />
+              </div>
+            ) : error ? (
+              <Card className="col-span-full p-8 text-center text-red-500">
+                {error}
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {userProjects.length > 0 ? (
+                  userProjects.map(project => (
+                    <div key={project.id} className="relative group">
+                      <ProjectCard
+                        project={project}
+                        showActions={true}
+                        showDate={false}
+                        showCourse={false}
+                        showImage={false}
+                        onView={
+                          (project.status === 'APPROVED' || project.status === 'ACTIVE' || project.status === 'FINISHED')
+                            ? () => navigate(`/projetos/${project.id}`)
+                            : undefined
+                        }
+                      />
+                      {/* Edit Button - Always Visible for Active/Approved */}
+                      {(project.status === 'ACTIVE' || project.status === 'APPROVED') && (
+                        <div className="absolute top-4 right-4 z-20">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/dashboard/projetos/editar/${project.id}`);
+                            }}
+                            className="bg-white/90 backdrop-blur-sm text-[var(--color-text)] p-2.5 rounded-full shadow-lg hover:bg-[var(--color-primary)] hover:text-white transition-all duration-200 border border-gray-100 hover:scale-110 active:scale-95"
+                            title="Editar Projeto"
+                          >
+                            <Edit size={18} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <Card className="col-span-full flex flex-col items-center justify-center gap-6 p-16 text-[var(--color-text-secondary)] text-center border-dashed border-2 border-[var(--color-border)] bg-gray-50/50 rounded-2xl">
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-2 shadow-sm border border-gray-100">
+                      <Plus className="text-gray-400" size={40} />
+                    </div>
+                    <div className="max-w-md">
+                      <p className="font-bold text-xl text-[var(--color-text)] mb-2">Nenhum projeto encontrado</p>
+                      <p className="text-sm text-[var(--color-text-secondary)]">Você ainda não submeteu nenhum projeto. Comece agora mesmo a compartilhar suas iniciativas.</p>
+                    </div>
+                    <Button
+                      variant="primary"
+                      onClick={() => navigate('/dashboard/projetos/novo')}
+                      className="!rounded-xl px-8 shadow-lg shadow-[var(--color-primary)]/20"
+                    >
+                      Submeter Primeiro Projeto
+                    </Button>
+                  </Card>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </main>

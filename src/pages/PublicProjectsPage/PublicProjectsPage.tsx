@@ -1,41 +1,56 @@
-import { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, ChevronLeft, ChevronRight, Filter, X, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { mockProjects, mockCourses, projectKeywords } from '../../services/mockData';
+import { projectService } from '../../services/projectService';
+import { courseService } from '../../services/courseService';
+import { Project, Course } from '../../types';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Button from '../../components/Button/Button';
 
 const PublicProjectsPage = () => {
     const navigate = useNavigate();
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCourse, setSelectedCourse] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
-    const [selectedKeyword, setSelectedKeyword] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Filter projects
-    const filteredProjects = mockProjects.filter(project => {
-        if (!project.isPublic) return false;
+    // Fetch data
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const [projectsData, coursesData] = await Promise.all([
+                    projectService.getAllFiltered({
+                        status: selectedStatus as any || undefined,
+                        course: selectedCourse || undefined,
+                        search: searchTerm || undefined,
+                    }),
+                    courseService.getAll()
+                ]);
+                setProjects(projectsData);
+                setCourses(coursesData);
+            } catch (err) {
+                console.error('Erro ao carregar projetos:', err);
+                setError(err instanceof Error ? err.message : 'Erro ao carregar projetos');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        if (searchTerm) {
-            const searchLower = searchTerm.toLowerCase();
-            const matchesTitle = project.title.toLowerCase().includes(searchLower);
-            const matchesDescription = project.description.toLowerCase().includes(searchLower);
-            if (!matchesTitle && !matchesDescription) return false;
-        }
-
-        if (selectedCourse && project.course !== selectedCourse) return false;
-        if (selectedStatus && project.status !== selectedStatus) return false;
-        if (selectedKeyword && !project.keywords?.includes(selectedKeyword)) return false;
-
-        return true;
-    });
+        fetchData();
+    }, [searchTerm, selectedCourse, selectedStatus]);
 
     // Pagination
     const projectsPerPage = 9;
-    const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
-    const paginatedProjects = filteredProjects.slice(
+    const totalPages = Math.ceil(projects.length / projectsPerPage);
+    const paginatedProjects = projects.slice(
         (currentPage - 1) * projectsPerPage,
         currentPage * projectsPerPage
     );
@@ -51,11 +66,10 @@ const PublicProjectsPage = () => {
         setSearchTerm('');
         setSelectedCourse('');
         setSelectedStatus('');
-        setSelectedKeyword('');
         setCurrentPage(1);
     };
 
-    const hasActiveFilters = searchTerm || selectedCourse || selectedStatus || selectedKeyword;
+    const hasActiveFilters = searchTerm || selectedCourse || selectedStatus;
 
     const statusLabels: Record<string, string> = {
         SUBMITTED: 'Submetido',
@@ -132,8 +146,8 @@ const PublicProjectsPage = () => {
                                 className="py-2 px-4 bg-white border border-secondary-200 rounded-lg text-sm font-medium text-secondary-700 hover:border-primary-500 focus:outline-none focus:border-primary-500 transition cursor-pointer shadow-sm"
                             >
                                 <option value="">Todos os Cursos</option>
-                                {mockCourses.map(course => (
-                                    <option key={course.id} value={course.name}>{course.name}</option>
+                                {courses.map(course => (
+                                    <option key={course.id} value={course.id}>{course.name}</option>
                                 ))}
                             </select>
 
@@ -143,24 +157,8 @@ const PublicProjectsPage = () => {
                                 className="py-2 px-4 bg-white border border-secondary-200 rounded-lg text-sm font-medium text-secondary-700 hover:border-primary-500 focus:outline-none focus:border-primary-500 transition cursor-pointer shadow-sm"
                             >
                                 <option value="">Todos os Status</option>
-                                <option value="SUBMITTED">Submetido</option>
-                                <option value="APPROVED">Aprovado</option>
-                                <option value="REJECTED">Rejeitado</option>
                                 <option value="ACTIVE">Ativo</option>
                                 <option value="FINISHED">Finalizado</option>
-                            </select>
-
-                            <select
-                                value={selectedKeyword}
-                                onChange={(e) => handleFilterChange(setSelectedKeyword)(e.target.value)}
-                                className="py-2 px-4 bg-white border border-secondary-200 rounded-lg text-sm font-medium text-secondary-700 hover:border-primary-500 focus:outline-none focus:border-primary-500 transition cursor-pointer shadow-sm"
-                            >
-                                <option value="">Palavras-chave</option>
-                                {projectKeywords.map(keyword => (
-                                    <option key={keyword} value={keyword}>
-                                        {keyword.charAt(0).toUpperCase() + keyword.slice(1)}
-                                    </option>
-                                ))}
                             </select>
 
                             {hasActiveFilters && (
@@ -174,12 +172,21 @@ const PublicProjectsPage = () => {
                         </div>
 
                         <div className="text-secondary-500 font-medium whitespace-nowrap">
-                            {filteredProjects.length} {filteredProjects.length === 1 ? 'projeto encontrado' : 'projetos encontrados'}
+                            {projects.length} {projects.length === 1 ? 'projeto encontrado' : 'projetos encontrados'}
                         </div>
                     </div>
 
                     {/* Projects Grid */}
-                    {paginatedProjects.length > 0 ? (
+                    {loading ? (
+                        <div className="flex items-center justify-center py-24">
+                            <Loader2 className="w-10 h-10 animate-spin text-primary-600" />
+                            <span className="ml-3 text-secondary-600 text-lg">Carregando projetos...</span>
+                        </div>
+                    ) : error ? (
+                        <div className="text-center py-24 bg-white rounded-2xl border border-red-200">
+                            <p className="text-red-600">{error}</p>
+                        </div>
+                    ) : paginatedProjects.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
                             {paginatedProjects.map(project => (
                                 <div
@@ -192,11 +199,17 @@ const PublicProjectsPage = () => {
                                         onClick={() => navigate(`/projetos/${project.id}`)}
                                     >
                                         <div className="absolute inset-0 bg-secondary-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                                        <img
-                                            src={project.image}
-                                            alt={project.title}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                        />
+                                        {project.img_url ? (
+                                            <img
+                                                src={project.img_url}
+                                                alt={project.name}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                                                <span className="text-primary-600 font-bold text-4xl">{project.name.charAt(0)}</span>
+                                            </div>
+                                        )}
                                         <div className="absolute top-3 right-3 z-20">
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusColors[project.status]} shadow-sm`}>
                                                 {statusLabels[project.status]}
@@ -208,13 +221,13 @@ const PublicProjectsPage = () => {
                                     <div className="p-6 flex-1 flex flex-col">
                                         <div className="mb-4">
                                             <span className="text-xs font-bold text-primary-600 uppercase tracking-wider mb-2 block">
-                                                {project.course || project.category}
+                                                {project.course?.name || 'Sem curso'}
                                             </span>
                                             <h3 className="text-lg font-bold text-secondary-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
-                                                {project.title}
+                                                {project.name}
                                             </h3>
                                             <p className="text-secondary-600 text-sm line-clamp-3 leading-relaxed">
-                                                {project.description}
+                                                {project.description || project.overview || 'Sem descrição'}
                                             </p>
                                         </div>
 

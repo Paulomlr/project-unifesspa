@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Mail } from 'lucide-react';
-import { mockProjects, mockUsers } from '../../services/mockData';
+import { ChevronRight, Mail, Loader2 } from 'lucide-react';
+import { projectService } from '../../services/projectService';
+import { Project } from '../../types';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Button from '../../components/Button/Button';
@@ -8,21 +10,51 @@ import Button from '../../components/Button/Button';
 const ProjectDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const [project, setProject] = useState<Project | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Find project
-    const project = mockProjects.find(p => p.id === parseInt(id || '0'));
+    useEffect(() => {
+        const fetchProject = async () => {
+            if (!id) return;
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await projectService.getById(id);
+                setProject(data);
+            } catch (err) {
+                console.error('Erro ao carregar projeto:', err);
+                setError(err instanceof Error ? err.message : 'Erro ao carregar projeto');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Find coordinator - remove "Prof." or "Profa." prefix
-    const coordinatorName = project?.coordinator.replace(/^(Prof\.|Profa\.)\s*/, '');
-    const coordinator = mockUsers.find(u => u.name === coordinatorName);
+        fetchProject();
+    }, [id]);
 
-    if (!project) {
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col bg-secondary-50">
+                <Header />
+                <main className="flex-1 flex items-center justify-center">
+                    <Loader2 className="w-10 h-10 animate-spin text-primary-600" />
+                    <span className="ml-3 text-secondary-600 text-lg">Carregando projeto...</span>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (error || !project) {
         return (
             <div className="min-h-screen flex flex-col bg-secondary-50">
                 <Header />
                 <main className="flex-1 flex items-center justify-center">
                     <div className="text-center">
-                        <h1 className="text-3xl font-bold text-secondary-900 mb-4">Projeto não encontrado</h1>
+                        <h1 className="text-3xl font-bold text-secondary-900 mb-4">
+                            {error || 'Projeto não encontrado'}
+                        </h1>
                         <Button onClick={() => navigate('/projetos')}>Voltar para Projetos</Button>
                     </div>
                 </main>
@@ -50,8 +82,8 @@ const ProjectDetailsPage = () => {
     };
 
     const handleSubscribe = () => {
-        if (project.subscriptionFormUrl) {
-            window.open(project.subscriptionFormUrl, '_blank');
+        if (project.registration_form_url) {
+            window.open(project.registration_form_url, '_blank');
         }
     };
 
@@ -69,13 +101,13 @@ const ProjectDetailsPage = () => {
                                 Projetos
                             </Link>
                             <ChevronRight size={16} />
-                            <span className="text-white font-medium">{project.title}</span>
+                            <span className="text-white font-medium">{project.name}</span>
                         </nav>
 
                         {/* Title & Status */}
                         <div className="flex items-start justify-between gap-6 mb-4">
                             <h1 className="text-4xl font-extrabold leading-tight flex-1">
-                                {project.title}
+                                {project.name}
                             </h1>
                             <span className={`px-4 py-2 rounded-full text-sm font-semibold border-2 bg-white ${statusColors[project.status]}`}>
                                 {statusLabels[project.status]}
@@ -91,7 +123,7 @@ const ProjectDetailsPage = () => {
 
                         {/* Description (Short) */}
                         <p className="text-lg text-white/80 leading-relaxed max-w-3xl">
-                            {project.description}
+                            {project.description || 'Sem descrição disponível.'}
                         </p>
 
 
@@ -105,11 +137,17 @@ const ProjectDetailsPage = () => {
                         {/* Left Column - Image */}
                         <div>
                             <div className="sticky top-8">
-                                <img
-                                    src={project.image}
-                                    alt={project.title}
-                                    className="w-full rounded-xl shadow-lg"
-                                />
+                                {project.img_url ? (
+                                    <img
+                                        src={project.img_url}
+                                        alt={project.name}
+                                        className="w-full rounded-xl shadow-lg"
+                                    />
+                                ) : (
+                                    <div className="w-full h-64 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl shadow-lg flex items-center justify-center">
+                                        <span className="text-primary-600 font-bold text-6xl">{project.name.charAt(0)}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -122,43 +160,52 @@ const ProjectDetailsPage = () => {
                                     Visão geral do projeto
                                 </h2>
                                 <p className="text-secondary-700 leading-relaxed text-lg">
-                                    {project.overview || project.fullDescription || `${project.description} Este projeto visa promover o desenvolvimento e bem-estar da comunidade universitária através de ações práticas e colaborativas. Com foco em resultados mensuráveis e impacto social, buscamos criar um ambiente mais inclusivo e sustentável para todos os envolvidos.`}
+                                    {project.overview || project.description || 'Sem descrição detalhada disponível.'}
                                 </p>
                             </section>
 
+                            {/* Resultados Esperados */}
+                            {project.expected_results && (
+                                <section>
+                                    <h2 className="text-2xl font-bold text-secondary-900 mb-4 flex items-center gap-3">
+                                        <span className="w-1 h-8 bg-primary-500 rounded-full"></span>
+                                        Resultados Esperados
+                                    </h2>
+                                    <p className="text-secondary-700 leading-relaxed text-lg">
+                                        {project.expected_results}
+                                    </p>
+                                </section>
+                            )}
+
                             {/* Indicadores de Impacto */}
-                            <section>
-                                <h2 className="text-2xl font-bold text-secondary-900 mb-6 flex items-center gap-3">
-                                    <span className="w-1 h-8 bg-primary-500 rounded-full"></span>
-                                    Indicadores de Impacto
-                                </h2>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="bg-gradient-to-br from-primary-50 to-white p-6 rounded-xl border border-primary-100 shadow-sm hover:shadow-md transition">
-                                        <p className="text-sm text-primary-600 font-semibold mb-2 uppercase tracking-wide">
-                                            Membros atendidos
-                                        </p>
-                                        <p className="text-4xl font-extrabold text-primary-600">
-                                            {project.impactMetrics?.membersServed || project.participants}
-                                        </p>
+                            {project.impactIndicators && project.impactIndicators.length > 0 && (
+                                <section>
+                                    <h2 className="text-2xl font-bold text-secondary-900 mb-6 flex items-center gap-3">
+                                        <span className="w-1 h-8 bg-primary-500 rounded-full"></span>
+                                        Indicadores de Impacto
+                                    </h2>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {project.impactIndicators.map((indicator, index) => {
+                                            const colors = [
+                                                { bg: 'from-primary-50', border: 'border-primary-100', text: 'text-primary-600' },
+                                                { bg: 'from-blue-50', border: 'border-blue-100', text: 'text-blue-600' },
+                                                { bg: 'from-green-50', border: 'border-green-100', text: 'text-green-600' },
+                                            ];
+                                            const color = colors[index % colors.length];
+                                            return (
+                                                <div key={indicator.id} className={`bg-gradient-to-br ${color.bg} to-white p-6 rounded-xl border ${color.border} shadow-sm hover:shadow-md transition`}>
+                                                    <p className={`text-sm ${color.text} font-semibold mb-2 uppercase tracking-wide`}>
+                                                        {indicator.title}
+                                                    </p>
+                                                    <p className={`text-4xl font-extrabold ${color.text}`}>
+                                                        {indicator.value}
+                                                    </p>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                    <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition">
-                                        <p className="text-sm text-blue-600 font-semibold mb-2 uppercase tracking-wide">
-                                            Oficinas realizadas
-                                        </p>
-                                        <p className="text-4xl font-extrabold text-blue-600">
-                                            {project.impactMetrics?.workshopsHeld || 5}
-                                        </p>
-                                    </div>
-                                    <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100 shadow-sm hover:shadow-md transition">
-                                        <p className="text-sm text-green-600 font-semibold mb-2 uppercase tracking-wide">
-                                            Horas voluntariado
-                                        </p>
-                                        <p className="text-4xl font-extrabold text-green-600">
-                                            {project.impactMetrics?.volunteerHours || '1000+'}
-                                        </p>
-                                    </div>
-                                </div>
-                            </section>
+                                </section>
+                            )}
 
                             {/* Project Info */}
                             <section className="bg-white p-6 rounded-xl border border-secondary-200 shadow-sm">
@@ -166,8 +213,24 @@ const ProjectDetailsPage = () => {
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3">
                                         <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Curso:</span>
-                                        <span className="text-secondary-900 font-medium">{project.course || project.category}</span>
+                                        <span className="text-secondary-900 font-medium">{project.course?.name || 'Não informado'}</span>
                                     </div>
+
+                                    {project.start_date && (
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Data início:</span>
+                                            <span className="text-secondary-900 font-medium">
+                                                {new Date(project.start_date).toLocaleDateString('pt-BR')}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {project.duration && (
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Duração:</span>
+                                            <span className="text-secondary-900 font-medium">{project.duration}</span>
+                                        </div>
+                                    )}
 
                                     <div className="flex items-start gap-3">
                                         <span className="text-sm font-semibold text-secondary-500 min-w-[120px]">Status:</span>
@@ -182,10 +245,10 @@ const ProjectDetailsPage = () => {
                                             <div className="flex flex-wrap gap-2">
                                                 {project.keywords.map(keyword => (
                                                     <span
-                                                        key={keyword}
+                                                        key={keyword.id}
                                                         className="px-3 py-1 bg-primary-50 text-primary-600 rounded-full text-xs font-semibold border border-primary-100"
                                                     >
-                                                        #{keyword}
+                                                        #{keyword.name}
                                                     </span>
                                                 ))}
                                             </div>
@@ -194,23 +257,23 @@ const ProjectDetailsPage = () => {
                                 </div>
                             </section>
 
-                            {/* Coordinator */}
-                            {coordinator && (
+                            {/* Creator/Coordinator */}
+                            {project.creator && (
                                 <section className="bg-gradient-to-br from-secondary-50 to-white p-6 rounded-xl border border-secondary-200 shadow-sm">
                                     <h2 className="text-xl font-bold text-secondary-900 mb-4">Coordenador do Projeto</h2>
 
                                     <div className="flex items-center gap-4 mb-4">
-                                        <img
-                                            src={coordinator.photo}
-                                            alt={coordinator.name}
-                                            className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-md"
-                                        />
+                                        <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center border-4 border-white shadow-md">
+                                            <span className="text-primary-600 font-bold text-2xl">
+                                                {project.creator.name.charAt(0).toUpperCase()}
+                                            </span>
+                                        </div>
                                         <div>
                                             <h3 className="font-bold text-secondary-900 text-lg">
-                                                {coordinator.name}
+                                                {project.creator.name}
                                             </h3>
                                             <p className="text-sm text-secondary-600">
-                                                {coordinator.department || coordinator.course}
+                                                {project.course?.name || 'Professor'}
                                             </p>
                                         </div>
                                     </div>
@@ -220,18 +283,18 @@ const ProjectDetailsPage = () => {
                                             Dúvidas? Entre em contato:
                                         </p>
                                         <a
-                                            href={`mailto:${coordinator.email}`}
+                                            href={`mailto:${project.creator.email}`}
                                             className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold transition group"
                                         >
                                             <Mail size={18} className="group-hover:scale-110 transition" />
-                                            {coordinator.email}
+                                            {project.creator.email}
                                         </a>
                                     </div>
                                 </section>
                             )}
 
                             {/* CTA Button */}
-                            {project.isPublic && project.subscriptionFormUrl && project.status === 'ACTIVE' && (
+                            {project.is_public && project.registration_form_url && project.status === 'ACTIVE' && (
                                 <div className="pt-6">
                                     <Button
                                         variant="primary"
