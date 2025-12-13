@@ -1,14 +1,9 @@
-import type { AuthResponse, VerifyTokenResponse, RegisterData, ErrorResponse } from '../types';
+import { ErrorResponse } from '../types/errorResponse';
+import { AuthResponse, VerifyTokenResponse, RegisterData } from '../types/userType';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-/**
- * Service for authentication operations
- */
 export const authService = {
-    /**
-     * Login user with email and password
-     */
     async login(email: string, password: string): Promise<AuthResponse> {
         try {
             const response = await fetch(`${API_BASE_URL}/login`, {
@@ -18,7 +13,7 @@ export const authService = {
                 },
                 body: JSON.stringify({ email, password }),
             });
-
+            
             const json = await response.json(); // lê o body só uma vez
 
             if (!response.ok) {

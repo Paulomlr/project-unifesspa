@@ -5,7 +5,7 @@ export interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     loading: boolean;
-    login: (userData: User) => void;
+    login: (userData: User, token: string) => void;
     logout: () => void;
     updateUser: (userData: User) => void;
 }
@@ -22,9 +22,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // Check for saved user in localStorage
+        // Check for saved user and token in localStorage
         const savedUser = localStorage.getItem('user');
-        if (savedUser) {
+        const savedToken = localStorage.getItem('token');
+        if (savedUser && savedToken) {
             try {
                 const parsedUser = JSON.parse(savedUser);
                 setUser(parsedUser);
@@ -32,21 +33,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             } catch (error) {
                 console.error('Error parsing saved user:', error);
                 localStorage.removeItem('user');
+                localStorage.removeItem('token');
             }
         }
         setLoading(false);
     }, []);
 
-    const login = (userData: User) => {
+    const login = (userData: User, token: string) => {
         setUser(userData);
         setIsAuthenticated(true);
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('token', token);
     };
 
     const logout = () => {
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
     };
 
     const updateUser = (userData: User) => {

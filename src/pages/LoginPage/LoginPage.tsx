@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { mockUsers } from '../../services/mockData';
 import Button from '../../components/Button/Button';
+import { authService } from '../../services/authService';
+import { User } from '../../types';
 
 interface LoginForm {
   email: string;
@@ -14,15 +16,26 @@ const LoginPage = () => {
   const { register, handleSubmit, formState: { errors }, setError } = useForm<LoginForm>();
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    const user = mockUsers.find(u => u.email === data.email);
-
-    if (user && data.password === 'senha123') {
-      login(user);
+  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await authService.login(data.email, data.password);
+      // O authService já normaliza o role para minúsculo
+      const user: User = {
+        ...response.user,
+        role: response.user.role.toLowerCase() as 'teacher' | 'admin',
+        photo: response.user.photo || '',
+        projects: response.user.projects || [],
+      };
+      login(user, response.token);
       navigate('/');
-    } else {
-      setError('email', { type: 'manual', message: 'Email ou senha incorretos' });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Email ou senha incorretos';
+      setError('email', { type: 'manual', message: errorMessage });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,10 +163,19 @@ const LoginPage = () => {
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" variant="primary" fullWidth size="large">
+              <Button type="submit" variant="primary" fullWidth size="large" disabled={isLoading}>
                 <span className="flex items-center justify-center gap-2">
-                  Entrar
-                  <ArrowRight size={20} />
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={20} className="animate-spin" />
+                      Entrando...
+                    </>
+                  ) : (
+                    <>
+                      Entrar
+                      <ArrowRight size={20} />
+                    </>
+                  )}
                 </span>
               </Button>
             </form>
