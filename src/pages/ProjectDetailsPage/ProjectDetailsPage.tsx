@@ -294,7 +294,7 @@ const ProjectDetailsPage = () => {
                             )}
 
                             {/* CTA Button */}
-                            {project.is_public && project.registration_form_url && project.status === 'ACTIVE' && (
+                            {project.registration_form_url && project.status === 'ACTIVE' && (
                                 <div className="pt-6">
                                     <Button
                                         variant="primary"

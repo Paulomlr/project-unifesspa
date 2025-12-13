@@ -1,16 +1,20 @@
 import { get, post, del } from './api';
 import type { Keyword, Project } from '../types';
 
-export interface CreateKeywordInput {
-    name: string;
-}
-
 export const keywordService = {
     /**
-     * Adicionar keyword a um projeto (requer autenticação)
+     * Adicionar keywords a um projeto (requer autenticação)
+     * Backend espera: { keywords: string[] }
      */
-    async addToProject(projectId: string, data: CreateKeywordInput): Promise<{ message: string; keyword: Keyword }> {
-        return post(`/keywords/projects/${projectId}`, data);
+    async addToProject(projectId: string, keywords: string[]): Promise<{ message: string; keywords: Keyword[] }> {
+        return post(`/keywords/projects/${projectId}`, { keywords });
+    },
+
+    /**
+     * Adicionar uma única keyword a um projeto
+     */
+    async addSingleToProject(projectId: string, keywordName: string): Promise<{ message: string; keywords: Keyword[] }> {
+        return post(`/keywords/projects/${projectId}`, { keywords: [keywordName] });
     },
 
     /**

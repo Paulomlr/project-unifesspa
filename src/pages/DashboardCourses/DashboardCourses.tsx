@@ -40,7 +40,6 @@ const DashboardCourses = () => {
         register: registerDelete,
         handleSubmit: handleSubmitDelete,
         reset: resetDelete,
-        watch: watchDelete,
         formState: { errors: errorsDelete }
     } = useForm<DeleteCourseForm>();
 

@@ -12,13 +12,15 @@ import { Course } from '../../types';
 interface SubmitProjectForm {
     name: string;
     subtitle: string;
-    course_id: string;
+    courseId: string;
     start_date: string;
-    duration: string;
+    duration: number;
     description: string;
     overview: string;
     expected_results: string;
     registration_form_url: string;
+    numberVacancies: number;
+    audience: 'INTERNAL' | 'EXTERNAL';
     proposal_file: FileList;
 }
 
@@ -51,27 +53,24 @@ const SubmitProjectPage = () => {
         setSubmitError(null);
 
         try {
-            // Criar o projeto primeiro
+            // Criar o projeto com campos obrigatórios do backend
             const projectData = {
                 name: data.name,
-                subtitle: data.subtitle || undefined,
                 description: data.description,
-                overview: data.overview || undefined,
-                expected_results: data.expected_results || undefined,
-                start_date: data.start_date ? new Date(data.start_date).toISOString() : undefined,
-                duration: data.duration || undefined,
-                course_id: data.course_id || undefined,
-                registration_form_url: data.registration_form_url || undefined,
-                is_public: false, // Começa como não público até aprovação
+                expected_results: data.expected_results,
+                start_date: data.start_date,
+                duration: Number(data.duration),
+                numberVacancies: Number(data.numberVacancies),
+                audience: data.audience,
+                courseId: data.courseId,
             };
 
-            const createdProject = await projectService.create(projectData);
+            const result = await projectService.create(projectData);
+            const createdProject = result.project;
 
             // Se houver arquivo de proposta, fazer upload
             if (data.proposal_file && data.proposal_file.length > 0) {
-                const formData = new FormData();
-                formData.append('proposal', data.proposal_file[0]);
-                await projectService.updateProposal(createdProject.id, formData);
+                await projectService.updateProposal(createdProject.id, data.proposal_file[0]);
             }
 
             alert('Projeto submetido com sucesso! Aguarde a aprovação.');
@@ -145,10 +144,10 @@ const SubmitProjectPage = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div>
                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                    Curso Vinculado
+                                                    Curso Vinculado *
                                                 </label>
                                                 <select
-                                                    {...register('course_id')}
+                                                    {...register('courseId', { required: 'Selecione um curso' })}
                                                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none bg-white"
                                                     disabled={loadingCourses}
                                                 >
@@ -157,6 +156,7 @@ const SubmitProjectPage = () => {
                                                         <option key={course.id} value={course.id}>{course.name}</option>
                                                     ))}
                                                 </select>
+                                                {errors.courseId && <span className="text-red-500 text-sm mt-1">{errors.courseId.message}</span>}
                                             </div>
 
                                             <div>
@@ -184,25 +184,59 @@ const SubmitProjectPage = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Data de Início Prevista
+                                                Data de Início Prevista *
                                             </label>
                                             <input
                                                 type="date"
-                                                {...register('start_date')}
+                                                {...register('start_date', { required: 'Data de início é obrigatória' })}
                                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
                                             />
+                                            {errors.start_date && <span className="text-red-500 text-sm mt-1">{errors.start_date.message}</span>}
                                         </div>
 
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Duração Prevista
+                                                Duração (meses) *
                                             </label>
                                             <input
-                                                type="text"
-                                                {...register('duration')}
+                                                type="number"
+                                                min="1"
+                                                {...register('duration', { required: 'Duração é obrigatória', min: { value: 1, message: 'Duração mínima de 1 mês' } })}
                                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
-                                                placeholder="Ex: 12 meses"
+                                                placeholder="Ex: 12"
                                             />
+                                            {errors.duration && <span className="text-red-500 text-sm mt-1">{errors.duration.message}</span>}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                Número de Vagas *
+                                            </label>
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                {...register('numberVacancies', { required: 'Número de vagas é obrigatório', min: { value: 1, message: 'Mínimo de 1 vaga' } })}
+                                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none"
+                                                placeholder="Ex: 20"
+                                            />
+                                            {errors.numberVacancies && <span className="text-red-500 text-sm mt-1">{errors.numberVacancies.message}</span>}
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                Público-alvo *
+                                            </label>
+                                            <select
+                                                {...register('audience', { required: 'Selecione o público-alvo' })}
+                                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none bg-white"
+                                            >
+                                                <option value="">Selecione...</option>
+                                                <option value="INTERNAL">Interno (Comunidade Acadêmica)</option>
+                                                <option value="EXTERNAL">Externo (Comunidade Externa)</option>
+                                            </select>
+                                            {errors.audience && <span className="text-red-500 text-sm mt-1">{errors.audience.message}</span>}
                                         </div>
                                     </div>
 
@@ -233,14 +267,15 @@ const SubmitProjectPage = () => {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Resultados Esperados
+                                            Resultados Esperados *
                                         </label>
                                         <textarea
-                                            {...register('expected_results')}
+                                            {...register('expected_results', { required: 'Resultados esperados são obrigatórios' })}
                                             rows={4}
                                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition outline-none resize-none"
                                             placeholder="Quais impactos e resultados são esperados com este projeto?"
                                         />
+                                        {errors.expected_results && <span className="text-red-500 text-sm mt-1">{errors.expected_results.message}</span>}
                                     </div>
 
                                     <div>

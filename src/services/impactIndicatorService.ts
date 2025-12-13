@@ -13,10 +13,18 @@ export interface UpdateImpactIndicatorInput {
 
 export const impactIndicatorService = {
     /**
-     * Criar indicador de impacto em um projeto (requer autenticação)
+     * Criar indicadores de impacto em um projeto (requer autenticação)
+     * Backend espera: { indicators: [{ title, value }] }
      */
-    async create(projectId: string, data: CreateImpactIndicatorInput): Promise<{ message: string; indicator: ImpactIndicator }> {
-        return post(`/projects/${projectId}/impact-indicators`, data);
+    async create(projectId: string, indicators: CreateImpactIndicatorInput[]): Promise<{ message: string; indicators: ImpactIndicator[] }> {
+        return post(`/projects/${projectId}/impact-indicators`, { indicators });
+    },
+
+    /**
+     * Criar um único indicador de impacto
+     */
+    async createSingle(projectId: string, indicator: CreateImpactIndicatorInput): Promise<{ message: string; indicators: ImpactIndicator[] }> {
+        return post(`/projects/${projectId}/impact-indicators`, { indicators: [indicator] });
     },
 
     /**

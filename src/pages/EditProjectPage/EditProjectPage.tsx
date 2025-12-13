@@ -29,12 +29,10 @@ const EditProjectPage = () => {
     // Keywords state
     const [keywords, setKeywords] = useState<Keyword[]>([]);
     const [keywordInput, setKeywordInput] = useState('');
-    const [removedKeywordIds, setRemovedKeywordIds] = useState<string[]>([]);
 
     // Impact Indicators state
     const [impactIndicators, setImpactIndicators] = useState<ImpactIndicator[]>([]);
     const [newIndicator, setNewIndicator] = useState<{ title: string; value: string }>({ title: '', value: '' });
-    const [removedIndicatorIds, setRemovedIndicatorIds] = useState<string[]>([]);
 
     // Image upload state
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -92,8 +90,11 @@ const EditProjectPage = () => {
         const trimmedKeyword = keywordInput.trim();
         if (trimmedKeyword && !keywords.some(k => k.name === trimmedKeyword) && project) {
             try {
-                const newKeyword = await keywordService.addToProject(project.id, trimmedKeyword);
-                setKeywords([...keywords, newKeyword]);
+                const result = await keywordService.addSingleToProject(project.id, trimmedKeyword);
+                // O backend retorna um array de keywords criadas
+                if (result.keywords && result.keywords.length > 0) {
+                    setKeywords([...keywords, ...result.keywords]);
+                }
                 setKeywordInput('');
             } catch (err) {
                 console.error('Erro ao adicionar keyword:', err);
@@ -104,7 +105,7 @@ const EditProjectPage = () => {
     const handleRemoveKeyword = async (keyword: Keyword) => {
         if (!project) return;
         try {
-            await keywordService.removeFromProject(project.id, keyword.id);
+            await keywordService.removeFromProject(keyword.id, project.id);
             setKeywords(keywords.filter(k => k.id !== keyword.id));
         } catch (err) {
             console.error('Erro ao remover keyword:', err);
@@ -121,12 +122,14 @@ const EditProjectPage = () => {
     const handleAddIndicator = async () => {
         if (newIndicator.title.trim() && newIndicator.value.trim() && project) {
             try {
-                const createdIndicator = await impactIndicatorService.create({
-                    project_id: project.id,
+                const result = await impactIndicatorService.createSingle(project.id, {
                     title: newIndicator.title,
-                    value: newIndicator.value
+                    value: parseInt(newIndicator.value, 10)
                 });
-                setImpactIndicators([...impactIndicators, createdIndicator]);
+                // O backend retorna um array de indicators criados
+                if (result.indicators && result.indicators.length > 0) {
+                    setImpactIndicators([...impactIndicators, ...result.indicators]);
+                }
                 setNewIndicator({ title: '', value: '' });
             } catch (err) {
                 console.error('Erro ao adicionar indicador:', err);
@@ -135,8 +138,9 @@ const EditProjectPage = () => {
     };
 
     const handleRemoveIndicator = async (indicator: ImpactIndicator) => {
+        if (!project) return;
         try {
-            await impactIndicatorService.delete(indicator.id);
+            await impactIndicatorService.delete(project.id, indicator.id);
             setImpactIndicators(impactIndicators.filter(i => i.id !== indicator.id));
         } catch (err) {
             console.error('Erro ao remover indicador:', err);
@@ -169,9 +173,7 @@ const EditProjectPage = () => {
 
             // Upload image if selected
             if (selectedImage) {
-                const formData = new FormData();
-                formData.append('image', selectedImage);
-                await projectService.updateImage(project.id, formData);
+                await projectService.updateImage(project.id, selectedImage);
             }
 
             alert('Projeto atualizado com sucesso!');

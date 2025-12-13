@@ -30,7 +30,16 @@ const Dashboard = () => {
                 setRecentProjects(projectsData.slice(0, 5));
             } catch (err) {
                 console.error('Erro ao carregar dashboard:', err);
-                setError(err instanceof Error ? err.message : 'Erro ao carregar dados');
+                const errorMessage = err instanceof Error ? err.message : 'Erro ao carregar dados';
+                
+                // Se o erro for de autenticação, redireciona para login
+                if (errorMessage.includes('Token') || errorMessage.includes('401')) {
+                    setError('Sessão expirada. Por favor, faça login novamente.');
+                } else if (errorMessage.includes('servidor')) {
+                    setError('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+                } else {
+                    setError(errorMessage);
+                }
             } finally {
                 setLoading(false);
             }
@@ -127,8 +136,28 @@ const Dashboard = () => {
                             <span className="ml-2 text-secondary-600">Carregando...</span>
                         </div>
                     ) : error ? (
-                        <div className="p-8 text-center text-red-600">
-                            {error}
+                        <div className="p-8 text-center">
+                            <div className="max-w-md mx-auto">
+                                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-lg font-bold text-red-600 mb-2">Erro ao Carregar Dados</h3>
+                                <p className="text-red-600">{error}</p>
+                            </div>
+                        </div>
+                    ) : recentProjects.length === 0 && stats.total === 0 ? (
+                        <div className="p-12 text-center">
+                            <div className="max-w-md mx-auto">
+                                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <FolderOpen className="w-10 h-10 text-gray-400" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-700 mb-2">Nenhum Projeto Cadastrado</h3>
+                                <p className="text-gray-500 mb-6">
+                                    Ainda não há projetos no sistema. Comece cadastrando cursos e submetendo seu primeiro projeto!
+                                </p>
+                            </div>
                         </div>
                     ) : (
                         <div className="overflow-x-auto">

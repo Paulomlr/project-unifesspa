@@ -23,7 +23,7 @@ const ProfilePage = () => {
       try {
         // Buscar todos os projetos e filtrar pelo criador
         const allProjects = await projectService.getAll();
-        const myProjects = allProjects.filter(p => p.creator_id === user.id);
+        const myProjects = allProjects.filter(p => p.creatorId === user.id);
         setUserProjects(myProjects);
       } catch (err: any) {
         console.error('Erro ao carregar projetos:', err);

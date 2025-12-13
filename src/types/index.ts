@@ -1,7 +1,7 @@
 // Enums
 export type ProjectStatus = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'ACTIVE' | 'FINISHED';
 export type AudienceType = 'INTERNAL' | 'EXTERNAL';
-export type UserRole = 'admin' | 'teacher';
+export type UserRole = 'ADMIN' | 'TEACHER' | 'admin' | 'teacher'; // Suporta ambos os formatos
 
 // Keyword
 export interface Keyword {
@@ -33,7 +33,7 @@ export interface User {
     projects?: string[];
 }
 
-// Project - corresponde ao backend
+// Project - corresponde ao backend (Prisma schema)
 export interface Project {
     id: string;
     name: string;
@@ -51,6 +51,8 @@ export interface Project {
     audience: AudienceType;
     courseId?: string | null;
     creatorId?: string | null;
+    is_public?: boolean;
+    // Relacionamentos incluídos nas queries
     course?: Course | null;
     creator?: {
         id: string;

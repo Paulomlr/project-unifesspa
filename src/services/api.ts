@@ -56,14 +56,35 @@ export const authenticatedFetch = async (
     return response;
 };
 
+const handleErrorResponse = async (response: Response, endpoint: string): Promise<never> => {
+    let errorMessage = 'Erro na requisição';
+    
+    try {
+        const error: ErrorResponse = await response.json();
+        errorMessage = error.message || error.error || errorMessage;
+    } catch {
+        // Se não conseguir parsear o JSON, usa a mensagem padrão
+    }
+    
+    if (response.status === 500) {
+        console.error(`Erro 500 no servidor para ${endpoint}:`, errorMessage);
+        throw new Error(`Erro interno do servidor. Verifique se o backend está funcionando corretamente.`);
+    }
+    
+    if (response.status === 404) {
+        throw new Error(`Recurso não encontrado: ${endpoint}`);
+    }
+    
+    throw new Error(errorMessage);
+};
+
 export const get = async <T = any>(endpoint: string): Promise<T> => {
     const response = await authenticatedFetch(endpoint, {
         method: 'GET',
     });
 
     if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-        throw new Error(error.message || 'Erro na requisição');
+        await handleErrorResponse(response, endpoint);
     }
 
     return response.json();
@@ -76,8 +97,7 @@ export const post = async <T = any>(endpoint: string, data: any): Promise<T> => 
     });
 
     if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-        throw new Error(error.message || 'Erro na requisição');
+        await handleErrorResponse(response, endpoint);
     }
 
     return response.json();
@@ -90,8 +110,7 @@ export const put = async <T = any>(endpoint: string, data: any): Promise<T> => {
     });
 
     if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-        throw new Error(error.message || 'Erro na requisição');
+        await handleErrorResponse(response, endpoint);
     }
 
     return response.json();
@@ -103,8 +122,7 @@ export const del = async <T = any>(endpoint: string): Promise<T> => {
     });
 
     if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-        throw new Error(error.message || 'Erro na requisição');
+        await handleErrorResponse(response, endpoint);
     }
 
     return response.json();
@@ -117,8 +135,7 @@ export const patch = async <T = any>(endpoint: string, data: any): Promise<T> =>
     });
 
     if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-        throw new Error(error.message || 'Erro na requisição');
+        await handleErrorResponse(response, endpoint);
     }
 
     return response.json();
